@@ -1,0 +1,31 @@
+{
+  "name": "rankin",
+  "version": "0.1.0",
+  "description": "Utility for generating configurable load against an Elasticsearch cluster",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/cdahlqvist/rankin.git"
+  },
+  "keywords": [
+    "elasticsearch",
+    "load",
+    "tool",
+    "benchmark"
+  ],
+  "author": "Christian Dahlqvist",
+  "license": "Apache License Version 2.0",
+  "bugs": {
+    "url": "https://github.com/cdahlqvist/rankin/issues"
+  },
+  "homepage": "https://github.com/cdahlqvist/rankin",
+  "dependencies": {
+    "async": "~0.9.0",
+    "elasticsearch": "^4.0.2",
+    "optimist": "~0.6.1",
+    "update-notifier": "~0.2.1"
+  }
+}

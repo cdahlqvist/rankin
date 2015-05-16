@@ -4,23 +4,9 @@ var util = require('../../lib/util');
 module.exports.init = function(esClient, parameters) {
 	var state = {};
   
-  if (parameters && parameters['log_count']) {
-    state['log_count'] = parameters['log_count'];
-  } else {
-    state['log_count'] = false;
-  }
-
-  if (parameters && parameters['log_health']) {
-    state['log_health'] = parameters['log_health'];
-  } else {
-    state['log_health'] = false;
-  }
-
-	if (parameters && parameters['index_pattern']) {
-		state['index_pattern'] = parameters['index_pattern'];
-	} else {
-		state['index_pattern'] = '*';
-	}
+  set_state_value('log_count', state, parameters, false);
+  set_state_value('log_health', state, parameters, false);
+  set_state_value('index_pattern', state, parameters, '*');
 
 	return state;
 }
@@ -72,5 +58,13 @@ module.exports.cluster_health = function(esClient, state, result_callback) {
 
     result_callback('OK');
   });
+}
+
+function set_state_value(name, state, parameters, default_value) {
+  if (parameters && parameters[name]) {
+    state[name] = parameters[name];
+  } else {
+    state[name] = default_value;
+  }
 }
 	

@@ -1,0 +1,69 @@
+{
+    "template" : "rankin*",
+    "settings" : {
+      "index.refresh_interval" : "5s"
+    },
+    "mappings" : {
+      "_default_" : {
+        "dynamic_templates" : [ {
+          "string_fields" : {
+            "mapping" : {
+              "index" : "not_analyzed",
+              "ignore_above" : 256,
+              "type" : "string",
+              "doc_values": true
+            },
+            "match_mapping_type" : "string",
+            "match" : "*"
+          }
+        },
+        {
+          "numeric_fields" : {
+            "mapping" : {
+              "type" : "long",
+              "doc_values": true
+            },
+            "match_mapping_type" : "long",
+            "match" : "*"
+          }
+        } ],
+        "properties" : {
+          "@version" : {
+            "index" : "not_analyzed",
+            "type" : "string"
+          },
+          "geoip" : {
+            "properties" : {
+               "location" : {
+                  "type" : "geo_point",
+                  "doc_values": true
+               }
+            },
+            "type" : "object",
+            "path" : "full",
+            "dynamic" : true
+         },
+          "agent" : {
+            "index" : "analyzed",
+            "type" : "string",
+            "norms" : {
+              "enabled" : false
+            }
+          },
+          "text" : {
+            "index" : "analyzed",
+            "type" : "string"
+          },
+          "@message": {
+            "type": "string",
+            "index": "no"
+          }
+        },
+        "_all" : {
+          "enabled" : false
+        }
+      }
+    },
+    "aliases" : { },
+    "order": 0
+}

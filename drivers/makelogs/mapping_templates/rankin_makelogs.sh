@@ -1,0 +1,1 @@
+curl -XPOST http://localhost:9200/_template/rankin_makelogs -d @rankin_makelogs.json

@@ -19,7 +19,7 @@ module.exports.init = function(esClient, parameters) {
   if (parameters && parameters['index_prefix']) {
     state.index_prefix = parameters['index_prefix'];
   } else {
-    state.index_prefix = 'logstash-';
+    state.index_prefix = 'rankin-';
   }
 
   if (parameters && parameters['time_index'] == false) {

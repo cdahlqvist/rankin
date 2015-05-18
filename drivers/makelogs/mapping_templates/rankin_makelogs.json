@@ -32,6 +32,11 @@
             "index" : "not_analyzed",
             "type" : "string"
           },
+          "@timestamp" : {
+            "format" : "dateOptionalTime",
+            "type" : "date",
+            "doc_values": true
+          },
           "geoip" : {
             "properties" : {
                "location" : {
@@ -42,7 +47,11 @@
             "type" : "object",
             "path" : "full",
             "dynamic" : true
-         },
+          },
+          "ip" : {
+            "type" : "ip",
+            "doc_values": true
+          },
           "agent" : {
             "index" : "analyzed",
             "type" : "string",

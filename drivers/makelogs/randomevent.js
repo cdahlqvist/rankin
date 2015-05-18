@@ -36,10 +36,8 @@ module.exports.RandomEvent = function(state) {
     samples.tags(),
     samples.tags2()
   ];
-  event.utc_time = dateAsIso;
   event.referer = 'http://' + samples.referrers() + '/' + samples.tags() + '/' + samples.astronauts();
   event.agent = samples.userAgents();
-  event.clientip = event.ip;
   event.bytes = event.response < 500 ? samples.lessRandomRespSize(event.extension) : 0;
 
   switch (event.extension) {

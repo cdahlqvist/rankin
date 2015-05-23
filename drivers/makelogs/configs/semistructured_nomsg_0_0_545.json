@@ -1,0 +1,21 @@
+{
+  "job_id": "semistructured_nomsg_0_0_545",
+  "concurrency": 10,
+  "driver": "makelogs",
+  "parameters": {
+    "batch_size":1000,
+    "days":"-10,-8" ,           
+    "index_prefix":"rankin-",  
+    "time_index":true,
+    "delete_fields":["spaces","xss","relatedContent","headings","links","@message"],    
+    "text_file":"./drivers/makelogs/test_data/serverfault_545_10000.txt",
+    "int_fields":0,       
+    "str_fields":0
+  },
+  "operations": [
+    {
+      "name": "index",
+      "weight": 1
+    }
+  ]
+}

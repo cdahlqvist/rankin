@@ -1,7 +1,7 @@
 # Example Configurations
 This folder contains a number of example configuration files that can be used to generate data together with the text and JSON data they correspond to. The files are named according to the following convention:
 
-**\<name\>\_\<message field\>\_\<integer fields\>\_\<string fields\>\_\<text length\>.json
+**\<name\>\_\<message field\>\_\<integer fields\>\_\<string fields\>\_\<text length\>.json**
 
 * **name** - Name of the configuration type
 * **message field** - Indicator whether @message field is stored on event of not. Allowed values are *msg* (@message field included) and *nomsg* (@message field not included).

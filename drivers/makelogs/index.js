@@ -3,6 +3,7 @@ var fs = require('fs');
 var util = require('../../lib/util');
 var moment = require('moment');
 var randomevent = require('./randomevent');
+var Promise = require('bluebird');
 
 module.exports.init = function(esClient, parameters) {
   var state = {};
@@ -10,7 +11,8 @@ module.exports.init = function(esClient, parameters) {
   set_state_value('batch_size', state, parameters, 1000);
   set_state_value('int_fields', state, parameters, 0);
   set_state_value('str_fields', state, parameters, 0);
-  set_state_value('output_file', state, parameters, undefined);
+  set_state_value('text_output_file', state, parameters, undefined);
+  set_state_value('json_output_file', state, parameters, undefined);
   
   if (parameters && parameters['days']) {
     state.days = parse_days(parameters['days']);
@@ -102,21 +104,37 @@ module.exports.index = function(esClient, state, result_callback) {
 
 module.exports.generate = function(esClient, state, result_callback) {
   generate_batch(state, [], function (result_array) {
-    if(state['output_file']) {
-      var string_events = [];
+    if(state['json_output_file'] || state['text_output_file']) {
+      var json_events = [];
+      var text_events = [];
       result_array.forEach(function (event) {
-      	string_events.push(JSON.stringify(event.body));
-      });
+        if (state['json_output_file']) {
+      	  json_events.push(JSON.stringify(event.body));
+        }
 
-      var data = string_events.join("\n") + "\n";
-
-      fs.appendFile(state['output_file'], data, function (err) {
-        if (err) {
-          result_callback('ERROR');
-        } else {
-          result_callback('OK');
+        if(state['text_output_file'] && event.body['@message']) {
+          text_events.push(event.body['@message']);
         }
       });
+
+      var json_data = json_events.join("\n") + "\n";
+      var text_data = text_events.join("\n") + "\n";
+
+      if (state['json_output_file'] && state['text_output_file'] && text_events.length > 0) {
+        fs.appendFile(state['json_output_file'], json_data, function () {
+          fs.appendFile(state['text_output_file'], text_data, function () {
+            result_callback('OK');
+          })
+        })
+      } else if (state['json_output_file']) {
+        fs.appendFile(state['json_output_file'], json_data, function () {
+          result_callback('OK');
+        })
+      } else if (state['text_output_file'] && text_events.length > 0) {
+        fs.appendFile(state['text_output_file'], text_data, function () {
+          result_callback('OK');
+        })
+      }
     } else {
       result_callback('OK');
     }

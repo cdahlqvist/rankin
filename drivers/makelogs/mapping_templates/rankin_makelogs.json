@@ -1,7 +1,9 @@
 {
     "template" : "rankin*",
     "settings" : {
-      "index.refresh_interval" : "5s"
+      "number_of_shards":1,
+      "number_of_replicas":0,
+      "index.refresh_interval" : "10s"
     },
     "mappings" : {
       "_default_" : {
@@ -37,26 +39,83 @@
             "type" : "date",
             "doc_values": true
           },
-          "geoip" : {
-            "properties" : {
-               "location" : {
-                  "type" : "geo_point",
-                  "doc_values": true
-               }
-            },
-            "type" : "object",
-            "path" : "full",
-            "dynamic" : true
+          "geo": {
+            "properties": {
+              "srcdest": {
+                "type": "string",
+                "index": "not_analyzed",
+                "doc_values": true
+              },
+              "dest": {
+                "type": "string",
+                "index": "not_analyzed",
+                "doc_values": true
+              },
+              "src": {
+                "type": "string",
+                "index": "not_analyzed",
+                "doc_values": true
+              },
+              "coordinates": {
+                "type": "geo_point",
+                "doc_values": true
+              }
+            }
+          },
+          "meta": {
+            "properties": {
+              "related": {
+                "type": "string"
+              },
+              "char": {
+                "type": "string",
+                "index": "not_analyzed",
+                "doc_values": true
+              },
+              "user": {
+                "properties": {
+                  "firstname": {
+                    "type": "string"
+                  },
+                  "lastname": {
+                    "type": "integer",
+                    "index": "not_analyzed",
+                    "doc_values": true
+                  }
+                }
+              }
+            }
           },
           "ip" : {
             "type" : "ip",
             "doc_values": true
           },
-          "agent" : {
-            "index" : "analyzed",
-            "type" : "string",
-            "norms" : {
-              "enabled" : false
+          "agent": {
+            "type": "multi_field",
+            "fields": {
+              "agent": {
+                "type": "string",
+                "index": "analyzed"
+              },
+              "raw": {
+                "type": "string",
+                "index": "not_analyzed",
+                "doc_values": true
+              }
+            }
+          },
+          "request": {
+            "type": "multi_field",
+            "fields": {
+              "request": {
+                "type": "string",
+                "index": "analyzed"
+              },
+              "raw": {
+                "type": "string",
+                "index": "not_analyzed",
+                "doc_values": true
+              }
             }
           },
           "text" : {

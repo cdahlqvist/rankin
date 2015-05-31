@@ -1,15 +1,15 @@
 {
-  "job_id": "semistructured_nomsg_0_0_950",
-  "concurrency": 10,
+  "job_id": "semistructured_nomsg_0_0_537",
+  "concurrency": 1,
   "driver": "makelogs",
   "parameters": {
     "batch_size":1000,
     "days":"-10,-8" ,           
-    "index_prefix":"rankin-",  
-    "time_index":true,
+    "index_prefix":"rankin-semistructured_nomsg_0_0_537",  
+    "time_index":false,
     "delete_fields":["spaces","xss","relatedContent","headings","links","@message"],    
-    "text_file":"./drivers/makelogs/test_data/serverfault_950_10000.txt",
-    "int_fields":0,        
+    "text_file":"./drivers/makelogs/test_data/serverfault_537_10000.txt",
+    "int_fields":0,       
     "str_fields":0
   },
   "operations": [

@@ -2,7 +2,7 @@ var _ = require('lodash');
 var samples = require('./samples');
 
 var dayMs = 86400000;
-var period = 21600000;
+var period = 20000000;
 
 module.exports.RandomEvent = function(state) {
   var event = {};
@@ -11,11 +11,37 @@ module.exports.RandomEvent = function(state) {
   if(!state.days) {
     dateAsIso = new Date().toISOString();
   } else {
-    var ts = _.random(state.days.start, state.days.end);
-    var offset = ts % period;
-    var delta = _.random(0, offset);
+    var rnd = _.random(0, 100);
 
-    dateAsIso = new Date(ts - delta).toISOString();
+    if (rnd < 70) {
+      // random date, plus less random time
+      var date = new Date(samples.randomMsInDayRange(state.days.start, state.days.end));
+
+      var ms = samples.lessRandomMsInDay();
+
+      // extract number of hours from the milliseconds
+      var hours = Math.floor(ms / 3600000);
+      ms = ms - hours * 3600000;
+
+      // extract number of minutes from the milliseconds
+      var minutes = Math.floor(ms / 60000);
+      ms = ms - minutes * 60000;
+
+      // extract number of seconds from the milliseconds
+      var seconds = Math.floor(ms / 1000);
+      ms = ms - seconds * 1000;
+
+      // apply the values found to the date
+      date.setUTCHours(hours, minutes, seconds, ms);
+
+      dateAsIso = date.toISOString();
+    } else {
+      var ts = _.random(state.days.start, state.days.end);
+      var offset = ts % period;
+      var delta = _.random(0, offset);
+
+      dateAsIso = new Date(ts - delta).toISOString();
+    }
   }
 
   if (state.time_index) {

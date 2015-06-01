@@ -6,7 +6,20 @@ var IpGenerator = require('./ip_generator');
 var Stochator = require('./stochator');
 var roundAllGets = require('./round_all_gets');
 
+var dayMs = 86400000;
+
 var sets = {};
+
+sets.randomMsInDayRange = function (startms, endms) {
+  return _.random(startms, endms);
+};
+
+sets.lessRandomMsInDay = roundAllGets(new Stochator({
+  min: 0,
+  max: dayMs,
+  mean: dayMs / 2,
+  stdev: dayMs * 0.15,
+}, 'get'));
 
 sets.lessRandomRespSize = require('./response_size');
 

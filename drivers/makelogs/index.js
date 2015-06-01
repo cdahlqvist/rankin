@@ -11,6 +11,7 @@ module.exports.init = function(esClient, parameters) {
   set_state_value('batch_size', state, parameters, 1000);
   set_state_value('int_fields', state, parameters, 0);
   set_state_value('str_fields', state, parameters, 0);
+  set_state_value('text_multiplier', state, parameters, 1);
   set_state_value('text_output_file', state, parameters, undefined);
   set_state_value('json_output_file', state, parameters, undefined);
   

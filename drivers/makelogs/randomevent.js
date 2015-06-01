@@ -85,10 +85,14 @@ module.exports.RandomEvent = function(state) {
   }
 
   if (state.text_lines) {
-    var index = _.random(0, state.text_lines.length - 1);
-    value = state.text_lines[index];
-    event.text = value;
-    text = ' ' + value;
+    text = ' ';
+    for (i = 0; i < state.text_multiplier; i++) {
+      var index = _.random(0, state.text_lines.length - 1);
+      value = state.text_lines[index];
+      text = text + value;
+    }
+
+    event.txt = text;
   } else {
     text = '';
   }

@@ -21,6 +21,7 @@ Parameter | Description
 **time_index** | Boolean parameter indicating whether time based indices are to be used. Defaults to *true*.
 **delete_fields** | List of base level event fields to be deleted before the event is passed on for indexing. This allows customisation of the generated output. By default no fields are deleted.
 **text_file** | Path to a text file used to add unstructured text at the end of the event and in a field called *text*. A random line will be added to each event generated. If no file specified nu unstructured data will be added to the event.
+**text_multiplier** | If a text file is configured, this parameter determines how many random text lines from the file that will be concatenated to form the text field. Defaults to 1.
 **int_fields** | Integer specifying the number of integer fields named *intfield<N>* to be generated for the event.
 **int_limits** | Array containing the maximum integer value the generated integer fields should have. If fewer limits than fields are specified, limits will be assigned based on modulo calculation. If no limit is specified, a max value of 10000000 will be used.
 **str_fields** | Integer specifying the number of string fields named *strfield<N>* to be generated for the event.

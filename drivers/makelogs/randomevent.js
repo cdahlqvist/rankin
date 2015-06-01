@@ -2,6 +2,7 @@ var _ = require('lodash');
 var samples = require('./samples');
 
 var dayMs = 86400000;
+var period = 21600000;
 
 module.exports.RandomEvent = function(state) {
   var event = {};
@@ -10,7 +11,11 @@ module.exports.RandomEvent = function(state) {
   if(!state.days) {
     dateAsIso = new Date().toISOString();
   } else {
-    dateAsIso = new Date(_.random(state.days.start, state.days.end)).toISOString();
+    var ts = _.random(state.days.start, state.days.end);
+    var offset = ts % period;
+    var delta = _.random(0, offset);
+
+    dateAsIso = new Date(ts - delta).toISOString();
   }
 
   if (state.time_index) {

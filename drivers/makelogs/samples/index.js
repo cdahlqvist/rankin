@@ -50,7 +50,9 @@ sets.tags2 = new WeightedList({
 });
 
 sets.timezones = new WeightedList({
-  '-07:00': 1
+  '-07:00': 3,
+  '-05:00': 2,
+  '+01:00': 1
 });
 
 sets.referrers = new WeightedList({

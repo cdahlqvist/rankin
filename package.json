@@ -1,6 +1,6 @@
 {
   "name": "rankin",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Utility for generating configurable load against an Elasticsearch cluster",
   "main": "index.js",
   "scripts": {

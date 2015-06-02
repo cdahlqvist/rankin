@@ -1,0 +1,28 @@
+{
+  "job_id": "KibanaExample",
+  "concurrency": 1,
+  "driver": "makelogs_kibana",
+  "rate_limit": 0.5,
+  "parameters": {
+    "index": "rankin_all",
+    "days": "2015-01-30,2015-01-31",
+    "period": 21
+  },
+  "operations": [
+    {
+      "name": "dashboard1",
+      "weight": 2,
+      "sla": 1000
+    },
+    {
+      "name": "dashboard2",
+      "weight": 1,
+      "sla": 1000
+    },
+    {
+      "name": "dashboard3",
+      "weight": 2,
+      "sla": 1000
+    }
+  ]
+}

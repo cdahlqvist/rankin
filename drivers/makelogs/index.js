@@ -11,6 +11,7 @@ module.exports.init = function(esClient, parameters) {
   set_state_value('batch_size', state, parameters, 1000);
   set_state_value('int_fields', state, parameters, 0);
   set_state_value('str_fields', state, parameters, 0);
+  set_state_value('error_delay', state, parameters, 100);
   set_state_value('text_multiplier', state, parameters, 1);
   set_state_value('text_output_file', state, parameters, undefined);
   set_state_value('json_output_file', state, parameters, undefined);
@@ -95,7 +96,13 @@ module.exports.index = function(esClient, state, result_callback) {
       body: bulk_body
     }, function (err, resp) {
       if (err) {
-        result_callback('ERROR');
+        result_callback('REQUEST_ERROR');
+      }
+
+      if(resp.errors) {
+        var delay = Math.max(state.error_delay, 0);
+
+        setTimeout(result_callback, delay, 'EVENT_ERROR');
       }
 
       result_callback('OK');

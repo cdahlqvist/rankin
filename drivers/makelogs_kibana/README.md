@@ -17,7 +17,7 @@ This operation retrieves data for Dashboard2 based on the configured parameters.
 ](./dashboard_images/dashboard2.png)
 
 ### dashboard3
-This operation retrieves data for Dashboard3 based on the configured parameters. This contains 7 visualisations and a search panel and looks like this:
+This operation retrieves data for Dashboard3 based on the configured parameters. This contains 7 visualisations and looks like this:
 
 ![
 ](./dashboard_images/dashboard3.png)

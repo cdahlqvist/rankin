@@ -28,7 +28,6 @@
     "moment": "~2.7.0",
     "async": "~0.9.0",
     "elasticsearch": "^4.0.2",
-    "optimist": "~0.6.1",
-    "update-notifier": "~0.2.1"
+    "optimist": "~0.6.1"
   }
 }

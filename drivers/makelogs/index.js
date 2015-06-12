@@ -99,7 +99,7 @@ module.exports.index = function(esClient, state, result_callback) {
         result_callback('REQUEST_ERROR');
       }
 
-      if(resp.errors) {
+      if(resp && ('errors' in resp) && resp.errors) {
         var delay = Math.max(state.error_delay, 0);
 
         setTimeout(result_callback, delay, 'EVENT_ERROR');

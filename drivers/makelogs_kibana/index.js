@@ -59,6 +59,7 @@ module.exports.dashboard1 = function(esClient, state, result_callback) {
   ];
 
   esClient.msearch({
+    preference: end_ts.toString(),
     body: bulk_body
   }, function (err, resp) {
     if (err) {
@@ -97,6 +98,7 @@ module.exports.dashboard2 = function(esClient, state, result_callback) {
   ];
 
   esClient.msearch({
+    preference: end_ts.toString(),
     body: bulk_body
   }, function (err, resp) {
     if (err) {
@@ -135,6 +137,7 @@ module.exports.dashboard3 = function(esClient, state, result_callback) {
   ];
 
   esClient.msearch({
+    preference: end_ts.toString(),
     body: bulk_body
   }, function (err, resp) {
     if (err) {

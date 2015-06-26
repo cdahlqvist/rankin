@@ -40,17 +40,17 @@ module.exports.traffic = function(esClient, state, result_callback) {
   }
 
   var bulk_body = [
-    {"index":"rankin_all","search_type":"count","ignore_unavailable":true},
+    {"index":state.index,"search_type":"count","ignore_unavailable":true},
     {"query":{"filtered":{"query":{"query_string":{"query":"*","analyze_wildcard":true}},"filter":{"bool":{"must":[{"query":{"query_string":{"query":text_filter,"analyze_wildcard":true}}},{"range":{"@timestamp":{"gte":start_ts,"lte":end_ts}}}],"must_not":[]}}}},"size":0,"aggs":{"3":{"terms":{"field":"ip","size":10,"order":{"_count":"desc"}},"aggs":{"4":{"sum":{"field":"bytes"}}}}}},
-    {"index":"rankin_all","search_type":"count","ignore_unavailable":true},
+    {"index":state.index,"search_type":"count","ignore_unavailable":true},
     {"size":0,"aggs":{"2":{"date_histogram":{"field":"@timestamp","interval":"1d","pre_zone":"+01:00","pre_zone_adjust_large_interval":true,"min_doc_count":1,"extended_bounds":{"min":start_ts,"max":end_ts}},"aggs":{"1":{"cardinality":{"field":"ip"}}}}},"highlight":{"pre_tags":["@kibana-highlighted-field@"],"post_tags":["@/kibana-highlighted-field@"],"fields":{"*":{}}},"query":{"filtered":{"query":{"match_all":{}},"filter":{"bool":{"must":[{"query":{"query_string":{"query":text_filter,"analyze_wildcard":true}}},{"range":{"@timestamp":{"gte":start_ts,"lte":end_ts}}}],"must_not":[]}}}}},
-    {"index":"rankin_all","search_type":"count","ignore_unavailable":true},
+    {"index":state.index,"search_type":"count","ignore_unavailable":true},
     {"size":0,"aggs":{"2":{"date_histogram":{"field":"@timestamp","interval":"1d","pre_zone":"+01:00","pre_zone_adjust_large_interval":true,"min_doc_count":1,"extended_bounds":{"min":start_ts,"max":end_ts}},"aggs":{"3":{"terms":{"field":"response","size":5,"order":{"_count":"desc"}}}}}},"highlight":{"pre_tags":["@kibana-highlighted-field@"],"post_tags":["@/kibana-highlighted-field@"],"fields":{"*":{}}},"query":{"filtered":{"query":{"match_all":{}},"filter":{"bool":{"must":[{"query":{"query_string":{"query":text_filter,"analyze_wildcard":true}}},{"range":{"@timestamp":{"gte":start_ts,"lte":end_ts}}}],"must_not":[]}}}}},
-    {"index":"rankin_all","search_type":"count","ignore_unavailable":true},
+    {"index":state.index,"search_type":"count","ignore_unavailable":true},
     {"size":0,"aggs":{"2":{"terms":{"field":"referer","size":10,"order":{"_count":"desc"}}}},"highlight":{"pre_tags":["@kibana-highlighted-field@"],"post_tags":["@/kibana-highlighted-field@"],"fields":{"*":{}}},"query":{"filtered":{"query":{"match_all":{}},"filter":{"bool":{"must":[{"query":{"query_string":{"query":text_filter,"analyze_wildcard":true}}},{"range":{"@timestamp":{"gte":start_ts,"lte":end_ts}}}],"must_not":[]}}}}},
-    {"index":"rankin_all","search_type":"count","ignore_unavailable":true},
+    {"index":state.index,"search_type":"count","ignore_unavailable":true},
     {"size":0,"aggs":{"2":{"terms":{"field":"geo.src","size":10,"order":{"_count":"desc"}}}},"highlight":{"pre_tags":["@kibana-highlighted-field@"],"post_tags":["@/kibana-highlighted-field@"],"fields":{"*":{}}},"query":{"filtered":{"query":{"match_all":{}},"filter":{"bool":{"must":[{"query":{"query_string":{"query":text_filter,"analyze_wildcard":true}}},{"range":{"@timestamp":{"gte":start_ts,"lte":end_ts}}}],"must_not":[]}}}}},
-    {"index":"rankin_all","search_type":"count","ignore_unavailable":true},
+    {"index":state.index,"search_type":"count","ignore_unavailable":true},
     {"size":0,"aggs":{"2":{"terms":{"field":"response","size":5,"order":{"_count":"desc"}}}},"highlight":{"pre_tags":["@kibana-highlighted-field@"],"post_tags":["@/kibana-highlighted-field@"],"fields":{"*":{}}},"query":{"filtered":{"query":{"match_all":{}},"filter":{"bool":{"must":[{"query":{"query_string":{"query":text_filter,"analyze_wildcard":true}}},{"range":{"@timestamp":{"gte":start_ts,"lte":end_ts}}}],"must_not":[]}}}}}
   ];
 
@@ -77,15 +77,15 @@ module.exports.errors = function(esClient, state, result_callback) {
   }
 
   var bulk_body = [
-    {"index":"rankin_all","search_type":"count","ignore_unavailable":true},
+    {"index":state.index,"search_type":"count","ignore_unavailable":true},
     {"size":0,"aggs":{"2":{"terms":{"field":"host","size":5,"order":{"_count":"desc"}}}},"highlight":{"pre_tags":["@kibana-highlighted-field@"],"post_tags":["@/kibana-highlighted-field@"],"fields":{"*":{}}},"query":{"filtered":{"query":{"query_string":{"query":"*","analyze_wildcard":true}},"filter":{"bool":{"must":[{"query":{"match":{"response":{"query":"503","type":"phrase"}}}},{"query":{"query_string":{"query":text_filter,"analyze_wildcard":true}}},{"range":{"@timestamp":{"gte":start_ts,"lte":end_ts}}}],"must_not":[]}}}}},
-    {"index":"rankin_all","search_type":"count","ignore_unavailable":true},
+    {"index":state.index,"search_type":"count","ignore_unavailable":true},
     {"size":0,"aggs":{"2":{"date_histogram":{"field":"@timestamp","interval":"1d","pre_zone":"+01:00","pre_zone_adjust_large_interval":true,"min_doc_count":1,"extended_bounds":{"min":start_ts,"max":end_ts}},"aggs":{"3":{"terms":{"field":"extension","size":5,"order":{"_count":"desc"}}}}}},"highlight":{"pre_tags":["@kibana-highlighted-field@"],"post_tags":["@/kibana-highlighted-field@"],"fields":{"*":{}},"fragment_size":2147483647},"query":{"filtered":{"query":{"query_string":{"query":"response: 503","analyze_wildcard":true}},"filter":{"bool":{"must":[{"query":{"query_string":{"query":text_filter,"analyze_wildcard":true}}},{"range":{"@timestamp":{"gte":start_ts,"lte":end_ts}}}],"must_not":[]}}}}},
-    {"index":"rankin_all","search_type":"count","ignore_unavailable":true},
+    {"index":state.index,"search_type":"count","ignore_unavailable":true},
     {"size":0,"aggs":{"2":{"terms":{"field":"host","size":5,"order":{"_count":"desc"}},"aggs":{"3":{"terms":{"field":"extension","size":5,"order":{"_count":"desc"}}}}}},"highlight":{"pre_tags":["@kibana-highlighted-field@"],"post_tags":["@/kibana-highlighted-field@"],"fields":{"*":{}},"fragment_size":2147483647},"query":{"filtered":{"query":{"query_string":{"query":"response: 503","analyze_wildcard":true}},"filter":{"bool":{"must":[{"query":{"query_string":{"query":text_filter,"analyze_wildcard":true}}},{"range":{"@timestamp":{"gte":start_ts,"lte":end_ts}}}],"must_not":[]}}}}},
-    {"index":"rankin_all","search_type":"count","ignore_unavailable":true},
+    {"index":state.index,"search_type":"count","ignore_unavailable":true},
     {"size":0,"aggs":{"2":{"terms":{"field":"request.raw","size":10,"order":{"_count":"desc"}}}},"highlight":{"pre_tags":["@kibana-highlighted-field@"],"post_tags":["@/kibana-highlighted-field@"],"fields":{"*":{}},"fragment_size":2147483647},"query":{"filtered":{"query":{"query_string":{"query":"response: 503","analyze_wildcard":true}},"filter":{"bool":{"must":[{"query":{"query_string":{"query":text_filter,"analyze_wildcard":true}}},{"range":{"@timestamp":{"gte":start_ts,"lte":end_ts}}}],"must_not":[]}}}}},
-    {"index":"rankin_all","search_type":"count","ignore_unavailable":true},
+    {"index":state.index,"search_type":"count","ignore_unavailable":true},
     {"size":0,"aggs":{"2":{"terms":{"field":"geo.src","size":10,"order":{"_count":"desc"}}}},"highlight":{"pre_tags":["@kibana-highlighted-field@"],"post_tags":["@/kibana-highlighted-field@"],"fields":{"*":{}},"fragment_size":2147483647},"query":{"filtered":{"query":{"query_string":{"query":"response: 503","analyze_wildcard":true}},"filter":{"bool":{"must":[{"query":{"query_string":{"query":text_filter,"analyze_wildcard":true}}},{"range":{"@timestamp":{"gte":start_ts,"lte":end_ts}}}],"must_not":[]}}}}}
   ];
 
@@ -112,15 +112,15 @@ module.exports.users = function(esClient, state, result_callback) {
   }
 
   var bulk_body = [
-    {"index":"rankin_all","search_type":"count","ignore_unavailable":true},
+    {"index":state.index,"search_type":"count","ignore_unavailable":true},
     {"query":{"filtered":{"query":{"query_string":{"query":"*","analyze_wildcard":true}},"filter":{"bool":{"must":[{"query":{"query_string":{"query":text_filter,"analyze_wildcard":true}}},{"range":{"@timestamp":{"gte":start_ts,"lte":end_ts}}}],"must_not":[]}}}},"size":0,"aggs":{"3":{"terms":{"field":"ip","size":10,"order":{"_count":"desc"}},"aggs":{"4":{"sum":{"field":"bytes"}}}}}},
-    {"index":"rankin_all","search_type":"count","ignore_unavailable":true},
+    {"index":state.index,"search_type":"count","ignore_unavailable":true},
     {"size":0,"aggs":{"2":{"date_histogram":{"field":"@timestamp","interval":"1d","pre_zone":"+01:00","pre_zone_adjust_large_interval":true,"min_doc_count":1,"extended_bounds":{"min":start_ts,"max":end_ts}},"aggs":{"1":{"cardinality":{"field":"ip"}}}}},"highlight":{"pre_tags":["@kibana-highlighted-field@"],"post_tags":["@/kibana-highlighted-field@"],"fields":{"*":{}}},"query":{"filtered":{"query":{"match_all":{}},"filter":{"bool":{"must":[{"query":{"query_string":{"query":text_filter,"analyze_wildcard":true}}},{"range":{"@timestamp":{"gte":start_ts,"lte":end_ts}}}],"must_not":[]}}}}},
-    {"index":"rankin_all","search_type":"count","ignore_unavailable":true},
+    {"index":state.index,"search_type":"count","ignore_unavailable":true},
     {"size":0,"aggs":{"2":{"terms":{"field":"geo.src","size":10,"order":{"_count":"desc"}},"aggs":{"3":{"terms":{"field":"machine.os","size":5,"order":{"_count":"desc"}}}}}},"highlight":{"pre_tags":["@kibana-highlighted-field@"],"post_tags":["@/kibana-highlighted-field@"],"fields":{"*":{}}},"query":{"filtered":{"query":{"match_all":{}},"filter":{"bool":{"must":[{"query":{"query_string":{"query":text_filter,"analyze_wildcard":true}}},{"range":{"@timestamp":{"gte":start_ts,"lte":end_ts}}}],"must_not":[]}}}}},
-    {"index":"rankin_all","search_type":"count","ignore_unavailable":true},
+    {"index":state.index,"search_type":"count","ignore_unavailable":true},
     {"size":0,"aggs":{"2":{"terms":{"field":"machine.os","size":10,"order":{"_count":"desc"}},"aggs":{"3":{"terms":{"field":"agent.raw","size":5,"order":{"_count":"desc"}}}}}},"highlight":{"pre_tags":["@kibana-highlighted-field@"],"post_tags":["@/kibana-highlighted-field@"],"fields":{"*":{}}},"query":{"filtered":{"query":{"match_all":{}},"filter":{"bool":{"must":[{"query":{"query_string":{"query":text_filter,"analyze_wildcard":true}}},{"range":{"@timestamp":{"gte":start_ts,"lte":end_ts}}}],"must_not":[]}}}}},
-    {"index":"rankin_all","search_type":"count","ignore_unavailable":true},
+    {"index":state.index,"search_type":"count","ignore_unavailable":true},
     {"size":0,"aggs":{"2":{"terms":{"field":"machine.os","size":10,"order":{"_count":"desc"}}}},"highlight":{"pre_tags":["@kibana-highlighted-field@"],"post_tags":["@/kibana-highlighted-field@"],"fields":{"*":{}}},"query":{"filtered":{"query":{"match_all":{}},"filter":{"bool":{"must":[{"query":{"query_string":{"query":text_filter,"analyze_wildcard":true}}},{"range":{"@timestamp":{"gte":start_ts,"lte":end_ts}}}],"must_not":[]}}}}}
   ];
 

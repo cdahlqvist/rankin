@@ -56,7 +56,8 @@ module.exports.traffic = function(esClient, state, result_callback) {
 
   esClient.msearch({
     preference: end_ts.toString(),
-    body: bulk_body
+    body: bulk_body,
+    requestTimeout: 300000
   }, function (err, resp) {
     if (err) {
       result_callback('ERROR');
@@ -91,7 +92,8 @@ module.exports.errors = function(esClient, state, result_callback) {
 
   esClient.msearch({
     preference: end_ts.toString(),
-    body: bulk_body
+    body: bulk_body,
+    requestTimeout: 300000
   }, function (err, resp) {
     if (err) {
       result_callback('ERROR');
@@ -126,7 +128,8 @@ module.exports.users = function(esClient, state, result_callback) {
 
   esClient.msearch({
     preference: end_ts.toString(),
-    body: bulk_body
+    body: bulk_body,
+    requestTimeout: 300000
   }, function (err, resp) {
     if (err) {
       result_callback('ERROR');

@@ -60,10 +60,10 @@ module.exports.traffic = function(esClient, state, result_callback) {
     requestTimeout: 300000
   }, function (err, resp) {
     if (err) {
-      result_callback('ERROR');
+      result_callback( { result_code: 'ERROR', visualizations: 6 } );
     }
 
-    result_callback('OK');
+    result_callback( { result_code: 'OK', visualizations: 6 } );
   });
 }
 
@@ -96,10 +96,10 @@ module.exports.errors = function(esClient, state, result_callback) {
     requestTimeout: 300000
   }, function (err, resp) {
     if (err) {
-      result_callback('ERROR');
+      result_callback( { result_code: 'ERROR', visualizations: 5 } );
     }
 
-    result_callback('OK');
+    result_callback( { result_code: 'OK', visualizations: 5 } );
   });
 }
 
@@ -132,10 +132,10 @@ module.exports.users = function(esClient, state, result_callback) {
     requestTimeout: 300000
   }, function (err, resp) {
     if (err) {
-      result_callback('ERROR');
+      result_callback( { result_code: 'ERROR', visualizations: 5 } );
     }
 
-    result_callback('OK');
+    result_callback( { result_code: 'OK', visualizations: 5 } );
   });
 }
 

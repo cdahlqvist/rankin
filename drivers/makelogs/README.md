@@ -28,7 +28,6 @@ Parameter | Description
 **str_files** | List of paths to files used to generate data for the string fields. For each field a random line in the file will be selected. If the number of files is lower than the number of fields, files will be selected based on modulo calculation. If no files are specified, string field generation will be disabled.
 **json_output_file** | Path to the file the *generate* operation should output JSON events to. If not specified, the *generate* operation will simply drop all generated events.
 **text_output_file** | Path to the file the *generate* operation should output the raw text events (the @message field in the event) to. If not specified, the *generate* operation will simply drop all generated events.
-**error_delay** | If errors are detected in the response, the worker will sleep for this amount of milliseconds before returning in order to ease pressure on the cluster. Defaults to 100.
 
 
 ## Example Configuration File

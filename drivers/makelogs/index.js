@@ -11,7 +11,6 @@ module.exports.init = function(esClient, parameters) {
   set_state_value('batch_size', state, parameters, 1000);
   set_state_value('int_fields', state, parameters, 0);
   set_state_value('str_fields', state, parameters, 0);
-  set_state_value('error_delay', state, parameters, 100);
   set_state_value('text_multiplier', state, parameters, 1);
   set_state_value('text_output_file', state, parameters, undefined);
   set_state_value('json_output_file', state, parameters, undefined);
@@ -97,15 +96,14 @@ module.exports.index = function(esClient, state, result_callback) {
     }, function (err, resp) {
       if (err) {
         result_callback('REQUEST_ERROR');
+      } else {
+        if(resp && ('errors' in resp) && resp.errors) {
+          var successful = state.batch_size - resp.errors;
+          result_callback( { result_code: 'EVENT_ERROR', batch_size: state.batch_size, succeeded: successful, failed: resp.errors } );
+        }
+
+        result_callback( { result_code: 'OK', batch_size: state.batch_size, succeeded: state.batch_size, failed: 0 } );
       }
-
-      if(resp && ('errors' in resp) && resp.errors) {
-        var delay = Math.max(state.error_delay, 0);
-
-        setTimeout(result_callback, delay, 'EVENT_ERROR');
-      }
-
-      result_callback('OK');
     });
   });
 }
@@ -131,20 +129,20 @@ module.exports.generate = function(esClient, state, result_callback) {
       if (state['json_output_file'] && state['text_output_file'] && text_events.length > 0) {
         fs.appendFile(state['json_output_file'], json_data, function () {
           fs.appendFile(state['text_output_file'], text_data, function () {
-            result_callback('OK');
+            result_callback( { result_code: 'OK', batch_size: state.batch_size } );
           })
         })
       } else if (state['json_output_file']) {
         fs.appendFile(state['json_output_file'], json_data, function () {
-          result_callback('OK');
+          result_callback( { result_code: 'OK', batch_size: state.batch_size } );
         })
       } else if (state['text_output_file'] && text_events.length > 0) {
         fs.appendFile(state['text_output_file'], text_data, function () {
-          result_callback('OK');
+          result_callback( { result_code: 'OK', batch_size: state.batch_size } );
         })
       }
     } else {
-      result_callback('OK');
+      result_callback( { result_code: 'OK', batch_size: state.batch_size } );
     }
   });
 }

@@ -23,8 +23,6 @@ Below is a sample configuration file that shows how the driver can be invoked. I
   "driver": "example",
   "rate_limit": 2,
   "parameters": {
-    "log_count": false,
-    "log_health": true,
     "index_pattern": "logstash*"
   },
   "operations": [

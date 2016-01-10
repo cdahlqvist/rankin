@@ -3,9 +3,7 @@ var util = require('../../lib/util');
 
 module.exports.init = function(esClient, parameters) {
 	var state = {};
-  
-  set_state_value('log_count', state, parameters, false);
-  set_state_value('log_health', state, parameters, false);
+
   set_state_value('index_pattern', state, parameters, '*');
 
 	return state;
@@ -20,13 +18,7 @@ module.exports.count = function(esClient, state, result_callback) {
       result_callback('ERROR');
     }
 
-    if(state['log_result'] && (state['count'] === undefined || state['count'] !== response.count)) {
-      var logmsg = 'example:count on index pattern ' + state.index_pattern + ' reported ' + response.count + ' hits.';
-      util.log(logmsg);
-      state['count'] = response.count;      
-    }
-
-    result_callback('OK');
+    result_callback( { 'result_code': 'OK', 'count': response.count, 'index_pattern': state['index_pattern'] } );
   });
 }
 
@@ -50,13 +42,7 @@ module.exports.cluster_health = function(esClient, state, result_callback) {
       result_callback('ERROR');
     }
 
-    if(state['log_result'] && (state['health'] === undefined || state['health'] !== response.status)) {
-      var logmsg = 'example:cluster_health is ' + response.status;
-      util.log(logmsg);
-      state['health'] = response.status;      
-    }
-
-    result_callback('OK');
+    result_callback( { 'result_code': 'OK', 'cluster_status': response.status } );
   });
 }
 

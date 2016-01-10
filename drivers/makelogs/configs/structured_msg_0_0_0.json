@@ -1,20 +1,24 @@
 {
-  "job_id": "structured_msg_0_0_0",
-  "concurrency": 10,
-  "driver": "makelogs",
-  "parameters": {
-    "batch_size":1000,
-    "days":"-10,-8" ,           
-    "index_prefix":"rankin-",  
-    "time_index":true,
-    "delete_fields":["spaces","xss","relatedContent","headings","links"],    
-    "int_fields":0,       
-    "str_fields":0
-  },
-  "operations": [
+  "jobs" : [
     {
-      "name": "index",
-      "weight": 1
+      "job_id": "structured_msg_0_0_0",
+      "concurrency": 10,
+      "driver": "makelogs",
+      "parameters": {
+        "batch_size":1000,
+        "days":"-10,-8" ,           
+        "index_prefix":"rankin-",  
+        "time_index":true,
+        "delete_fields":["spaces","xss","relatedContent","headings","links"],    
+        "int_fields":0,       
+        "str_fields":0
+      },
+      "operations": [
+        {
+          "name": "index",
+          "weight": 1
+        }
+      ]
     }
   ]
 }

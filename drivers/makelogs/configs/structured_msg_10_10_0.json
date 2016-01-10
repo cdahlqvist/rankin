@@ -1,22 +1,26 @@
 {
-  "job_id": "structured_msg_10_10_0",
-  "concurrency": 10,
-  "driver": "makelogs",
-  "parameters": {
-    "batch_size":1000,
-    "days":"-10,-8" ,           
-    "index_prefix":"rankin-",  
-    "time_index":true,
-    "delete_fields":["spaces","xss","relatedContent","headings","links"],
-    "int_fields":10,       
-    "int_limits":[20000000,20,2000000000,20000,2000000000],
-    "str_fields":10,        
-    "str_files":["./drivers/makelogs/test_data/strings_10_100.txt","./drivers/makelogs/test_data/strings_20_10.txt","./drivers/makelogs/test_data/strings_5_1000.txt","./drivers/makelogs/test_data/strings_10_1000.txt","./drivers/makelogs/test_data/strings_20_100.txt"]
-  },
-  "operations": [
+  "jobs" : [
     {
-      "name": "index",
-      "weight": 1
+      "job_id": "structured_msg_10_10_0",
+      "concurrency": 10,
+      "driver": "makelogs",
+      "parameters": {
+        "batch_size":1000,
+        "days":"-10,-8" ,           
+        "index_prefix":"rankin-",  
+        "time_index":true,
+        "delete_fields":["spaces","xss","relatedContent","headings","links"],
+        "int_fields":10,       
+        "int_limits":[20000000,20,2000000000,20000,2000000000],
+        "str_fields":10,        
+        "str_files":["./drivers/makelogs/test_data/strings_10_100.txt","./drivers/makelogs/test_data/strings_20_10.txt","./drivers/makelogs/test_data/strings_5_1000.txt","./drivers/makelogs/test_data/strings_10_1000.txt","./drivers/makelogs/test_data/strings_20_100.txt"]
+      },
+      "operations": [
+        {
+          "name": "index",
+          "weight": 1
+        }
+      ]
     }
   ]
 }

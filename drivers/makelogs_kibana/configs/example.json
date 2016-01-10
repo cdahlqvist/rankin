@@ -1,28 +1,32 @@
 {
-  "job_id": "KibanaExample",
-  "concurrency": 1,
-  "driver": "makelogs_kibana",
-  "rate_limit": 0.5,
-  "parameters": {
-    "index": "rankin_all",
-    "days": "2015-01-20,2015-01-31",
-    "period": 7
-  },
-  "operations": [
+  "jobs" : [
     {
-      "name": "traffic",
-      "weight": 2,
-      "sla": 1000
-    },
-    {
-      "name": "errors",
-      "weight": 2,
-      "sla": 1000
-    },
-    {
-      "name": "users",
-      "weight": 2,
-      "sla": 1000
+      "job_id": "KibanaExample",
+      "concurrency": 1,
+      "driver": "makelogs_kibana",
+      "rate_limit": 0.5,
+      "parameters": {
+        "index": "rankin_all",
+        "days": "2015-01-20,2015-01-31",
+        "period": 7
+      },
+      "operations": [
+        {
+          "name": "traffic",
+          "weight": 2,
+          "sla": 1000
+        },
+        {
+          "name": "errors",
+          "weight": 2,
+          "sla": 1000
+        },
+        {
+          "name": "users",
+          "weight": 2,
+          "sla": 1000
+        }
+      ]
     }
   ]
 }

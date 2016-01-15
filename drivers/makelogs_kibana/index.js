@@ -29,7 +29,7 @@ module.exports.init = function(esClient, parameters) {
   return state;
 }
 
-module.exports.traffic = function(esClient, state, result_callback) {
+module.exports.traffic = function(esClient, state, operation_parameters, result_callback) {
   var end_ts = _.random(state.days.start, state.days.end);
   var start_ts = end_ts - (state.period * 24 * 3600 * 1000);
 
@@ -67,7 +67,7 @@ module.exports.traffic = function(esClient, state, result_callback) {
   });
 }
 
-module.exports.errors = function(esClient, state, result_callback) {
+module.exports.errors = function(esClient, state, operation_parameters, result_callback) {
   var end_ts = _.random(state.days.start, state.days.end);
   var start_ts = end_ts - (state.period * 24 * 3600 * 1000);
 
@@ -103,7 +103,7 @@ module.exports.errors = function(esClient, state, result_callback) {
   });
 }
 
-module.exports.users = function(esClient, state, result_callback) {
+module.exports.users = function(esClient, state, operation_parameters, result_callback) {
   var end_ts = _.random(state.days.start, state.days.end);
   var start_ts = end_ts - (state.period * 24 * 3600 * 1000);
 

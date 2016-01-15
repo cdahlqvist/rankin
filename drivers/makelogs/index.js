@@ -83,7 +83,7 @@ module.exports.init = function(esClient, parameters) {
   return state;
 }
 
-module.exports.index = function(esClient, state, result_callback) {
+module.exports.index = function(esClient, state, operation_parameters, result_callback) {
   generate_batch(state, [], function (result_array) {
     var bulk_body = [];
     result_array.forEach(function (event) {
@@ -108,7 +108,7 @@ module.exports.index = function(esClient, state, result_callback) {
   });
 }
 
-module.exports.generate = function(esClient, state, result_callback) {
+module.exports.generate = function(esClient, state, operation_parameters, result_callback) {
   generate_batch(state, [], function (result_array) {
     if(state['json_output_file'] || state['text_output_file']) {
       var json_events = [];

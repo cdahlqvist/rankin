@@ -53,12 +53,14 @@ Rankin is, in addition to the command-line configuration parameters described ab
       "operations": [
         {
           "name": "ping",
-          "weight": 1
+          "weight": 1,
+          "parameters":{}
         },
         {
           "name": "count",
           "weight": 2,
-          "sla": 200
+          "sla": 200,
+          "parameters":{}
         },
         {
           "name": "cluster_health",
@@ -83,7 +85,7 @@ concurrency | No | The number of concurrent connections/workers that should be u
 driver | Yes | Which driver to use for this job. This defined which operations and parameters that are supported.
 rate_limit | No | This is an upper limit for the number of requests per second the job will aim to generate against the cluster. If not specified this will default to generate as many requests as possible.
 parameters | No | Parameters to be sent through to the driver during the initiation phase. Can be used to customise the driver's behaviour.
-operations | No | List of the operations to run for the job. Each operation must be specified by name. If no weight is specified, it defaults to 1 for the operation. If no sla (given in ms) is specified, no sla will be tracked. If no operations at all are specified, all operations supported by the driver will be run with equal probability of selection.
+operations | No | List of the operations to run for the job. Each operation must be specified by name. If no weight is specified, it defaults to 1 for the operation. If no sla (given in ms) is specified, no sla will be tracked. It is also possible to pass in parameters to the operation, although this field is optional. If no operations at all are specified, all operations supported by the driver will be run with equal probability of selection.
 
 ## Extending Rankin
 Rankin comes with a selection of example drivers that can be used as templates when createing custom drivers. These are typically located in the *drivers* directory. 

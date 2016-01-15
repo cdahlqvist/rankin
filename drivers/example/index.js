@@ -18,7 +18,7 @@ module.exports.count = function(esClient, state, operation_parameters, result_ca
       result_callback('ERROR');
     }
 
-    result_callback( { 'result_code': 'OK', 'count': response.count, 'index_pattern': state['index_pattern'], parameters: operation_parameters } );
+    result_callback( { 'result_code': 'OK', 'count': response.count, 'index_pattern': state['index_pattern'] } );
   });
 }
 

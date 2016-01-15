@@ -37,9 +37,7 @@ Rankin is, in addition to the command-line configuration parameters described ab
 ```
 {
   "run": {
-    "cluster":"test_cluster",
-    "data_nodes":2,
-    "instance_type":"i2.2xlarge"
+    "cluster":"test_cluster"
   },
   "jobs": [
     {
@@ -53,14 +51,20 @@ Rankin is, in addition to the command-line configuration parameters described ab
       "operations": [
         {
           "name": "ping",
-          "weight": 1,
-          "parameters":{}
+          "weight": 1
         },
         {
           "name": "count",
           "weight": 2,
+          "sla": 200
+        },
+        {
+          "name": "count",
+          "weight": 1,
           "sla": 200,
-          "parameters":{}
+          "parameters": {
+            "index_pattern": "rankin*"
+          }
         },
         {
           "name": "cluster_health",

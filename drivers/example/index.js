@@ -1,6 +1,6 @@
 
 module.exports.init = function(esClient, parameters) {
-	var state = {};
+  var state = {};
 
   set_state_value('index_pattern', state, parameters, '*');
 

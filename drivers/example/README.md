@@ -20,34 +20,41 @@ Below is a sample configuration file that shows how the driver can be invoked. I
 
 ```
 {
-  "job_id": "job1",
-  "concurrency": 1,
-  "driver": "example",
-  "rate_limit": 2,
-  "parameters": {
-    "index_pattern": "logstash*"
+  "run": {
+    "cluster":"test_cluster"
   },
-  "operations": [
+  "jobs": [
     {
-      "name": "ping",
-      "weight": 1
-    },
-    {
-      "name": "count",
-      "weight": 2,
-      "sla": 200
-    },
-    {
-      "name": "count",
-      "weight": 1,
-      "sla": 200,
+      "job_id": "job1",
+      "concurrency": 1,
+      "driver": "example",
+      "rate_limit": 2,
       "parameters": {
-        "index_pattern": "rankin*"
-      }
-    },
-    {
-      "name": "cluster_health",
-      "weight": 1
+        "index_pattern": "logstash*"
+      },
+      "operations": [
+        {
+          "name": "ping",
+          "weight": 1
+        },
+        {
+          "name": "count",
+          "weight": 2,
+          "sla": 200
+        },
+        {
+          "name": "count",
+          "weight": 1,
+          "sla": 200,
+          "parameters": {
+            "index_pattern": "rankin*"
+          }
+        },
+        {
+          "name": "cluster_health",
+          "weight": 1
+        }
+      ]
     }
   ]
 }

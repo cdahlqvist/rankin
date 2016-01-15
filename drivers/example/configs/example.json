@@ -1,0 +1,36 @@
+{
+  "run": {
+    "cluster":"test_cluster",
+    "data_nodes":2,
+    "instance_type":"i2.2xlarge"
+  },
+  "jobs": [
+    {
+      "job_id": "job1",
+      "concurrency": 1,
+      "driver": "example",
+      "rate_limit": 2,
+      "parameters": {
+        "index_pattern": "logstash*"
+      },
+      "operations": [
+        {
+          "name": "ping",
+          "weight": 1,
+          "parameters": {}
+        },
+        {
+          "name": "count",
+          "weight": 2,
+          "sla": 200,
+          "parameters": {}
+        },
+        {
+          "name": "cluster_health",
+          "weight": 1,
+          "parameters": {}
+        }
+      ]
+    }
+  ]
+}

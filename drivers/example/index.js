@@ -9,7 +9,7 @@ module.exports.init = function(esClient, parameters) {
 	return state;
 }
 
-module.exports.count = function(esClient, state, result_callback) {
+module.exports.count = function(esClient, state, operation_parameters, result_callback) {
   esClient.count({
     index: state['index_pattern'],
     requestTimeout: 30000
@@ -18,11 +18,11 @@ module.exports.count = function(esClient, state, result_callback) {
       result_callback('ERROR');
     }
 
-    result_callback( { 'result_code': 'OK', 'count': response.count, 'index_pattern': state['index_pattern'] } );
+    result_callback( { 'result_code': 'OK', 'count': response.count, 'index_pattern': state['index_pattern'], parameters: operation_parameters } );
   });
 }
 
-module.exports.ping = function(esClient, state, result_callback) {
+module.exports.ping = function(esClient, state, operation_parameters, result_callback) {
   esClient.ping({
     requestTimeout: 30000
   }, function (error, response) {
@@ -34,7 +34,7 @@ module.exports.ping = function(esClient, state, result_callback) {
   });
 }
 
-module.exports.cluster_health = function(esClient, state, result_callback) {
+module.exports.cluster_health = function(esClient, state, operation_parameters, result_callback) {
   esClient.cluster.health({
     requestTimeout: 30000
   }, function (error, response) {

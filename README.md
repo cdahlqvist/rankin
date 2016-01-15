@@ -85,7 +85,16 @@ concurrency | No | The number of concurrent connections/workers that should be u
 driver | Yes | Which driver to use for this job. This defined which operations and parameters that are supported.
 rate_limit | No | This is an upper limit for the number of requests per second the job will aim to generate against the cluster. If not specified this will default to generate as many requests as possible.
 parameters | No | Parameters to be sent through to the driver during the initiation phase. Can be used to customise the driver's behaviour.
-operations | No | List of the operations to run for the job. Each operation must be specified by name. If no weight is specified, it defaults to 1 for the operation. If no sla (given in ms) is specified, no sla will be tracked. It is also possible to pass in parameters to the operation, although this field is optional. If no operations at all are specified, all operations supported by the driver will be run with equal probability of selection.
+operations | No | List of the operations to run for the job. If no operations at all are specified, all operations supported by the driver will be run with equal probability of selection. The structure op an operation is described in the table below.
+
+Each operation in the list can contsin the following parameters:
+
+Field | Mandatory | Description
+:------------ | :------------- | :------------
+name | Yes | Name of the operation. Must be defined by the driver.
+weight | No | The relative number of operations of this type that willbe performed. Must be an integer greater than 0. If no weight is specified, it defaults to 1 for the operation. 
+sla | No | Defines the upper SLA limit in milliseconds for the operation. If this is defined, every operation that exceeds this threshold will be flagged. If no sla is specified, no sla will be tracked.
+parameters | No | This field can contsin a set of parameters that will be passed in to the operation for every execution.
 
 ## Extending Rankin
 Rankin comes with a selection of example drivers that can be used as templates when createing custom drivers. These are typically located in the *drivers* directory. 
@@ -95,5 +104,7 @@ Created custom drivers can be stored there as well, but Rankin will fall back on
 Each driver should have an **init** function, which takes the configuration parameters and created a **state** object that will be passed into each operation.
 
 It will then also implement one or more **operations** which takes an Elasticsearch client, the created state as well as a callback for reporting the result of the operation as arguments.
+
+A more detailed description of how a driver is constructed can be found [in the documentation for the example driver](./drivers/example/README.md).
 
 

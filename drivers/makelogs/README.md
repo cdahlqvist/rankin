@@ -39,29 +39,33 @@ Each generated event has some standard fields removed and a text field and 2 str
 
 ```
 {
-  "job_id": "job2",
-  "concurrency": 10,
-  "driver": "makelogs",
-  "rate_limit": 15,
-  "parameters": {
-    "batch_size": 500,
-    "days": "2015-01-01,2015-01-05",
-    "delete_fields": ["spaces","xss","relatedContent","headings","links"],
-    "text_file": "./loglines.txt",
-    "int_fields": 2,
-    "int_limits": [20, 5000000],
-    "str_fields": 2,
-    "str_files": ["./strings.txt"]
-  },
-  "operations": [
+  "jobs": [
     {
-      "name": "index",
-      "weight": 14,
-      "sla": 1000
-    },
-    {
-      "name": "generate",
-      "weight": 1
+      "job_id": "job2",
+      "concurrency": 10,
+      "driver": "makelogs",
+      "rate_limit": 15,
+      "parameters": {
+        "batch_size": 500,
+        "days": "2015-01-01,2015-01-05",
+        "delete_fields": ["spaces","xss","relatedContent","headings","links"],
+        "text_file": "./loglines.txt",
+        "int_fields": 2,
+        "int_limits": [20, 5000000],
+        "str_fields": 2,
+        "str_files": ["./strings.txt"]
+      },
+      "operations": [
+        {
+          "name": "index",
+          "weight": 14,
+          "sla": 1000
+        },
+        {
+          "name": "generate",
+          "weight": 1
+        }
+      ]
     }
   ]
 }

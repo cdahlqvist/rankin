@@ -39,30 +39,34 @@ This example switches between all three dashboards according to the weights at a
 
 ```
 {
-  "job_id": "KibanaExample",
-  "concurrency": 1,
-  "driver": "makelogs_kibana",
-  "rate_limit": 0.2,
-  "parameters": {
-    "index": "rankin_all",
-    "days": "2015-01-30,2015-01-31",
-    "period": 21
-  },
-  "operations": [
+  "jobs": [
     {
-      "name": "traffic",
-      "weight": 6,
-      "sla": 2000
-    },
-    {
-      "name": "errors",
-      "weight": 1,
-      "sla": 3000
-    },
-    {
-      "name": "users",
-      "weight": 3,
-      "sla": 2000
+      "job_id": "KibanaExample",
+      "concurrency": 1,
+      "driver": "makelogs_kibana",
+      "rate_limit": 0.2,
+      "parameters": {
+        "index": "rankin_all",
+        "days": "2015-01-30,2015-01-31",
+        "period": 21
+      },
+      "operations": [
+        {
+          "name": "traffic",
+          "weight": 6,
+          "sla": 2000
+        },
+        {
+          "name": "errors",
+          "weight": 1,
+          "sla": 3000
+        },
+        {
+          "name": "users",
+          "weight": 3,
+          "sla": 2000
+        }
+      ]
     }
   ]
 }

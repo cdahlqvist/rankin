@@ -30,6 +30,7 @@ Parameter | Description
 **index** | Index or alias the Kibana queries should be directed at. Defaults to 'rankin*'.
 **days** | Date or date interval the current date will be randomized from. This can be specified in 3 formats: 1) Absolute single date, e.g. *"2015-04-20"* 2) Absolute date range, e.g. *"2015-04-20,2015-04-26"* 3) Date range relative to current date/time, e.g. *"-7,3"*. Defaults to *"-1,0"*.
 **period** | Length of the period in days that the Kiana queries will address. Defaults to 30.
+**timeout** | Request timeout in milliseconds. Defaults to 30000 (30s). This can also be passed as a parameter to the individual operations.
 **text_filter_file** | Path to file containing terms used to filter the 'text' field. If no file is provided, the default behaviour is that no filtering on the 'text' field will occur.
 
 ## Example Configuration File
@@ -48,13 +49,17 @@ This example switches between all three dashboards according to the weights at a
       "parameters": {
         "index": "rankin_all",
         "days": "2015-01-30,2015-01-31",
-        "period": 21
+        "period": 21,
+        "timeout": 60000
       },
       "operations": [
         {
           "name": "traffic",
           "weight": 6,
-          "sla": 2000
+          "sla": 2000,
+          "parameters:" {
+            "timeout": 120000
+          }
         },
         {
           "name": "errors",

@@ -9,6 +9,7 @@ module.exports.init = function(esClient, parameters) {
   
   set_state_value('index', state, parameters, "rankin*");
   set_state_value('period', state, parameters, 30);
+  set_state_value('timeout', state, parameters, 30000);
 
   if (parameters && parameters['days']) {
     state.days = parse_days(parameters['days']);
@@ -30,6 +31,11 @@ module.exports.init = function(esClient, parameters) {
 }
 
 module.exports.traffic = function(esClient, state, operation_parameters, result_callback) {
+  var timeout = state.timeout;
+  if(operation_parameters.timeout && util.is_integer(operation_parameters.timeout) && operation_parameters.timeout > 0) {
+    timeout = operation_parameters.timeout;
+  }
+
   var end_ts = _.random(state.days.start, state.days.end);
   var start_ts = end_ts - (state.period * 24 * 3600 * 1000);
 
@@ -57,17 +63,22 @@ module.exports.traffic = function(esClient, state, operation_parameters, result_
   esClient.msearch({
     preference: end_ts.toString(),
     body: bulk_body,
-    requestTimeout: 300000
+    requestTimeout: timeout
   }, function (err, resp) {
     if (err) {
-      result_callback( { result_code: 'ERROR', visualizations: 6 } );
+      result_callback( { result_code: 'ERROR', visualizations: 6, timeout: timeout } );
     }
 
-    result_callback( { result_code: 'OK', visualizations: 6 } );
+    result_callback( { result_code: 'OK', visualizations: 6, timeout: timeout } );
   });
 }
 
 module.exports.errors = function(esClient, state, operation_parameters, result_callback) {
+  var timeout = state.timeout;
+  if(operation_parameters.timeout && util.is_integer(operation_parameters.timeout) && operation_parameters.timeout > 0) {
+    timeout = operation_parameters.timeout;
+  }
+
   var end_ts = _.random(state.days.start, state.days.end);
   var start_ts = end_ts - (state.period * 24 * 3600 * 1000);
 
@@ -93,17 +104,22 @@ module.exports.errors = function(esClient, state, operation_parameters, result_c
   esClient.msearch({
     preference: end_ts.toString(),
     body: bulk_body,
-    requestTimeout: 300000
+    requestTimeout: timeout
   }, function (err, resp) {
     if (err) {
-      result_callback( { result_code: 'ERROR', visualizations: 5 } );
+      result_callback( { result_code: 'ERROR', visualizations: 5, timeout: timeout } );
     }
 
-    result_callback( { result_code: 'OK', visualizations: 5 } );
+    result_callback( { result_code: 'OK', visualizations: 5, timeout: timeout } );
   });
 }
 
 module.exports.users = function(esClient, state, operation_parameters, result_callback) {
+  var timeout = state.timeout;
+  if(operation_parameters.timeout && util.is_integer(operation_parameters.timeout) && operation_parameters.timeout > 0) {
+    timeout = operation_parameters.timeout;
+  }
+
   var end_ts = _.random(state.days.start, state.days.end);
   var start_ts = end_ts - (state.period * 24 * 3600 * 1000);
 
@@ -129,13 +145,13 @@ module.exports.users = function(esClient, state, operation_parameters, result_ca
   esClient.msearch({
     preference: end_ts.toString(),
     body: bulk_body,
-    requestTimeout: 300000
+    requestTimeout: timeout
   }, function (err, resp) {
     if (err) {
-      result_callback( { result_code: 'ERROR', visualizations: 5 } );
+      result_callback( { result_code: 'ERROR', visualizations: 5, timeout: timeout } );
     }
 
-    result_callback( { result_code: 'OK', visualizations: 5 } );
+    result_callback( { result_code: 'OK', visualizations: 5, timeout: timeout } );
   });
 }
 

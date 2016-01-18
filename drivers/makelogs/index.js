@@ -95,14 +95,14 @@ module.exports.index = function(esClient, state, operation_parameters, result_ca
       body: bulk_body
     }, function (err, resp) {
       if (err) {
-        result_callback('REQUEST_ERROR');
+        result_callback( { result_code: 'REQUEST_ERROR', operations_count: state.batch_size, operations_ok: 0, operations_fail: state.batch_size } );
       } else {
         if(resp && ('errors' in resp) && resp.errors) {
           var successful = state.batch_size - resp.errors;
-          result_callback( { result_code: 'EVENT_ERROR', batch_size: state.batch_size, succeeded: successful, failed: resp.errors } );
+          result_callback( { result_code: 'EVENT_ERROR', operations_count: state.batch_size, operations_ok: successful, operations_fail: resp.errors } );
         }
 
-        result_callback( { result_code: 'OK', batch_size: state.batch_size, succeeded: state.batch_size, failed: 0 } );
+        result_callback( { result_code: 'OK', operations_count: state.batch_size, operations_ok: state.batch_size, operations_fail: 0 } );
       }
     });
   });

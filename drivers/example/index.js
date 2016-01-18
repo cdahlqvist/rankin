@@ -1,5 +1,5 @@
 
-module.exports.init = function(esClient, parameters) {
+module.exports.init = function(esClient, parameters, driver_data) {
   var state = {};
 
   set_state_value('index_pattern', state, parameters, '*');
@@ -7,7 +7,7 @@ module.exports.init = function(esClient, parameters) {
 	return state;
 }
 
-module.exports.count = function(esClient, state, operation_parameters, result_callback) {
+module.exports.count = function(esClient, state, driver_data, operation_parameters, result_callback) {
   var index_pattern = state['index_pattern'];
 
   if(operation_parameters.index_pattern) {
@@ -26,7 +26,7 @@ module.exports.count = function(esClient, state, operation_parameters, result_ca
   });
 }
 
-module.exports.ping = function(esClient, state, operation_parameters, result_callback) {
+module.exports.ping = function(esClient, state, driver_data, operation_parameters, result_callback) {
   esClient.ping({
     requestTimeout: 30000
   }, function (error, response) {
@@ -38,7 +38,7 @@ module.exports.ping = function(esClient, state, operation_parameters, result_cal
   });
 }
 
-module.exports.cluster_health = function(esClient, state, operation_parameters, result_callback) {
+module.exports.cluster_health = function(esClient, state, driver_data, operation_parameters, result_callback) {
   esClient.cluster.health({
     requestTimeout: 30000
   }, function (error, response) {

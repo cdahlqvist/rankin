@@ -4,7 +4,7 @@ var samples = require('./samples');
 var dayMs = 86400000;
 var period = 20000000;
 
-module.exports.RandomEvent = function(state) {
+module.exports.RandomEvent = function(state, driver_data) {
   var event = {};
   var dateAsIso;
 
@@ -93,7 +93,8 @@ module.exports.RandomEvent = function(state) {
 
   event.url = 'https://' + event.host + event.request;
 
-  var i, key, value, text;
+  var i, key, value;
+  var text = [];
   var str_fields = [];
   var int_fields = [];
 
@@ -108,29 +109,26 @@ module.exports.RandomEvent = function(state) {
   for(i = 0; i < state.str_fields; i++) {
     key = 'strfield' + i;
     var str_index = i % state.str_files.length;
-    var str_array = state.str_files[str_index];
-    var array_index = _.random(0, str_array.length - 1);
-    value = str_array[array_index];
+    var filename = state.str_files[str_index];
+    var array_index = _.random(0, driver_data[filename].length - 1);
+    value = driver_data[filename][array_index];
     event[key] = value;
     str_fields.push(value);
   }
 
-  if (state.text_lines) {
-    text = ' ';
-    for (i = 0; i < state.text_multiplier; i++) {
-      var index = _.random(0, state.text_lines.length - 1);
-      value = state.text_lines[index];
-      text = text + value;
+  if (state.text_files) {
+    for (i = 0; i < state.text_files.length; i++) {
+      driver_data[state.text_files[i]]
+      var index = _.random(0, driver_data[state.text_files[i]].length - 1);
+      text.push(driver_data[state.text_files[i]][index]);
     }
 
-    event.txt = text;
-  } else {
-    text = '';
+    event.text = text.join(' ');
   }
 
   event['@message'] = event.ip + ' - - [' + dateAsIso + '] "GET ' + event.request + ' HTTP/1.1" ' +
       event.response + ' ' + event.bytes + ' "-" "' + event.agent + '" "' + str_fields.join('" "') +
-      '" ' + int_fields.join(' ') + text;
+      '" ' + int_fields.join(' ') + text.join(' ');
 
   event.spaces = 'this   is   a   thing    with lots of     spaces       wwwwoooooo';
   event.xss = '<script>console.log("xss")</script>';

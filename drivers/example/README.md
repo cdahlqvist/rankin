@@ -66,15 +66,15 @@ The structure of a driver is best understood by reviewing the [example driver](.
 
 ## The init() function
 
-The init function is passed parameters and an instance of a Elasticsearch client. It is responsible for
-initiating the state object, which will be passed into every operation initiated by this worker. This
-makes it possible to carry state between operations initiated by a single worker. There is however no 
-method available to synchronize multiple workers.
+The init function is passed an instance of a Elasticsearch client, parameters and an object that can be used to hold data shared between all tasks for a specific driver. It is responsible for initiating the state object, which will be passed into every operation initiated by this worker. This
+makes it possible to carry state between operations initiated by a single worker. There is however no method available to synchronize multiple workers.
+
+It should also store any sharded data in the *driver_data* object.
 
 This function is expected to be synchronous as it needs to be completed before the worker starts processing operations.
 
 ```
-module.exports.init = function(esClient, parameters) {
+module.exports.init = function(esClient, parameters, driver_data) {
 	var state = {};
 
   set_state_value('index_pattern', state, parameters, '*');
@@ -93,22 +93,24 @@ function set_state_value(name, state, parameters, default_value) {
 
 ## Functions implementing operations
 
-All functions that represent operations take 4 parameters.
+All functions that represent operations take 5 parameters.
 
 1. An instance of an Elasticsearch client
 
-2. The state object that was initiated by the **init()** function.
+2. The state object that was initiated by the *init()* function.
 
-3. An object containing any parameters that were specified at the operation level in the config file. If no parameters were specified, an empty object will be passed.
+3. An *driver_data* object holding references to shared data for this particular driver initiated by the *init()* function.
 
-4. A callback function used to return the results to the worker once the operation has completed. 
+4. An object containing any parameters that were specified at the operation level in the config file. If no parameters were specified, an empty object will be passed.
+
+5. A callback function used to return the results to the worker once the operation has completed. 
 
 This operation looks at parameters passed at different levels and determines which index pattern to use for the operation.
 
 When the operation has completed, the callback function is passed a results object. In this it is mandatory to set **result_code** to a string, but any other fields are flexible and optional.
 
 ```
-module.exports.count = function(esClient, state, operation_parameters, result_callback) {
+module.exports.count = function(esClient, state, driver_data, operation_parameters, result_callback) {
   var index_pattern = state['index_pattern'];
 
   if(operation_parameters.index_pattern) {
@@ -128,11 +130,11 @@ module.exports.count = function(esClient, state, operation_parameters, result_ca
 }
 ```
 
-The operation below illustrates that it is possible to just reurn a simple result string instead of a complete object.
+The operation below illustrates that it is possible to just return a simple result string instead of a complete object.
 
 
 ```
-module.exports.ping = function(esClient, state, operation_parameters, result_callback) {
+module.exports.ping = function(esClient, state, driver_data, operation_parameters, result_callback) {
   esClient.ping({
     requestTimeout: 30000
   }, function (error, response) {

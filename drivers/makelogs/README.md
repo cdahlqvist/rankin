@@ -20,8 +20,7 @@ Parameter | Description
 **index_prefix** | Prefix for the index name. This will be used as full index name if time based indices are not used. Defaults to *"rankin-"*.
 **time_index** | Boolean parameter indicating whether time based indices are to be used. Defaults to *true*.
 **delete_fields** | List of base level event fields to be deleted before the event is passed on for indexing. This allows customisation of the generated output. By default no fields are deleted.
-**text_file** | Path to a text file used to add unstructured text at the end of the event and in a field called *text*. A random line will be added to each event generated. If no file specified nu unstructured data will be added to the event.
-**text_multiplier** | If a text file is configured, this parameter determines how many random text lines from the file that will be concatenated to form the text field. Defaults to 1.
+**text_files** | Array of paths to text files used to add unstructured text at the end of the event and in a field called *text*. A random line will be selected from each file and be concatenated to each event generated. If no file specified no unstructured data will be added to the event.
 **int_fields** | Integer specifying the number of integer fields named *intfield<N>* to be generated for the event.
 **int_limits** | Array containing the maximum integer value the generated integer fields should have. If fewer limits than fields are specified, limits will be assigned based on modulo calculation. If no limit is specified, a max value of 10000000 will be used.
 **str_fields** | Integer specifying the number of string fields named *strfield<N>* to be generated for the event.
@@ -33,7 +32,7 @@ Parameter | Description
 ## Example Configuration File
 Below is a sample configuration file that shows how the driver can be invoked. 
 
-This example aim to generate an average of 14 bulk **index** requests per second with 500 records each, giving an average indexing rate of 7000 events/second across 10 workers. It also generates an average of one **generate** operation per second in order to track how long the data generation takes.
+This example aim to generate an average of 15 bulk **index** requests per second with 1000 records each, giving an average indexing rate of 15000 events/second across 10 workers.
 
 Each generated event has some standard fields removed and a text field and 2 string fields and 2 integer fields added. Both string fields will be populated based on the same list.
 
@@ -46,10 +45,10 @@ Each generated event has some standard fields removed and a text field and 2 str
       "driver": "makelogs",
       "rate_limit": 15,
       "parameters": {
-        "batch_size": 500,
+        "batch_size": 1000,
         "days": "2015-01-01,2015-01-05",
         "delete_fields": ["spaces","xss","relatedContent","headings","links"],
-        "text_file": "./loglines.txt",
+        "text_files": ["./loglines.txt"],
         "int_fields": 2,
         "int_limits": [20, 5000000],
         "str_fields": 2,
@@ -58,12 +57,8 @@ Each generated event has some standard fields removed and a text field and 2 str
       "operations": [
         {
           "name": "index",
-          "weight": 14,
+          "weight": 1,
           "sla": 1000
-        },
-        {
-          "name": "generate",
-          "weight": 1
         }
       ]
     }

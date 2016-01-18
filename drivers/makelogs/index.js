@@ -5,13 +5,15 @@ var moment = require('moment');
 var randomevent = require('./randomevent');
 var Promise = require('bluebird');
 
-module.exports.init = function(esClient, parameters) {
+module.exports.init = function(esClient, parameters, driver_data) {
   var state = {};
-  
+  var i;
+
   set_state_value('batch_size', state, parameters, 1000);
   set_state_value('int_fields', state, parameters, 0);
   set_state_value('str_fields', state, parameters, 0);
-  set_state_value('text_multiplier', state, parameters, 1);
+  set_state_value('str_files', state, parameters, []);
+  set_state_value('text_files', state, parameters, []);
   set_state_value('text_output_file', state, parameters, undefined);
   set_state_value('json_output_file', state, parameters, undefined);
   
@@ -49,42 +51,45 @@ module.exports.init = function(esClient, parameters) {
     }
   }
 
-  if (state.str_fields) {
-    if (parameters['_files_']) {
-      state.str_files = parameters['_files_'];
+  if (state.str_fields && state.str_fields > 0) {
+    if (!state.str_files || !util.is_string_array(state.str_files) || state.str_files.length < 1) {
+      util.log('makelogs error: Incorrect parameter str_files specified.');
+      process.exit();
     } else {
-      if (!parameters.str_files || !util.is_string_array(parameters.str_files)) {
-        util.log('makelogs error: Incorrect parameter str_files specified. Disabling str_fields.');
-        state.str_fields = 0;
-      } else {
-        var files = load_string_files(parameters.str_files);
+      for(i = 0; i < state.str_files.length; i++) {
+        if(!driver_data[state.str_files[i]]) {
+          var lines = load_string_file(state.str_files[i]);
+          if(lines == undefined) {
+            process.exit();
+          }
 
-        if(files) {
-        	state.str_files = files;
-            parameters['_files_'] = files;
-        } else {
-        	util.log('makelogs error: Unable to parse specified str_files. Disabling str_fields.');
-            state.str_fields = 0;
+          driver_data[state.str_files[i]] = lines;
         }
       }
     }
   }
   
-  if (parameters && parameters['text_file']) {
-    if (parameters['_text_lines_']) {
-      state.text_lines = parameters['_text_lines_'];
-    } else {
-      var text_lines = load_string_file(parameters['text_file']);
-      state.text_lines = text_lines;
-      parameters['_text_lines_'] = text_lines;
+  if (!state.text_files || !util.is_string_array(state.text_files) || state.text_files.length < 1) {
+    util.log('makelogs error: Incorrect parameter text_files specified.');
+    process.exit();
+  } else {
+    for(i = 0; i < state.text_files.length; i++) {
+      if(!driver_data[state.text_files[i]]) {
+        var lines = load_string_file(state.text_files[i]);
+        if(lines == undefined) {
+          process.exit();
+        }
+
+        driver_data[state.text_files[i]] = lines;
+      }
     }
   }
 
   return state;
 }
 
-module.exports.index = function(esClient, state, operation_parameters, result_callback) {
-  generate_batch(state, [], function (result_array) {
+module.exports.index = function(esClient, state, driver_data, operation_parameters, result_callback) {
+  generate_batch(state, driver_data, [], function (result_array) {
     var bulk_body = [];
     result_array.forEach(function (event) {
     	bulk_body.push(event.header);
@@ -108,8 +113,8 @@ module.exports.index = function(esClient, state, operation_parameters, result_ca
   });
 }
 
-module.exports.generate = function(esClient, state, operation_parameters, result_callback) {
-  generate_batch(state, [], function (result_array) {
+module.exports.generate = function(esClient, state, driver_data, operation_parameters, result_callback) {
+  generate_batch(state, driver_data, [], function (result_array) {
     if(state['json_output_file'] || state['text_output_file']) {
       var json_events = [];
       var text_events = [];
@@ -148,11 +153,11 @@ module.exports.generate = function(esClient, state, operation_parameters, result
 }
 
 
-function generate_batch(state, data_array, result_callback) {
+function generate_batch(state, driver_data, data_array, result_callback) {
   var events_to_generate = Math.min(20, (state.batch_size - data_array.length));
 
   for (var i = 0; i < events_to_generate; i++) {
-    var event = randomevent.RandomEvent(state);
+    var event = randomevent.RandomEvent(state, driver_data);
     state.delete_fields.forEach(function remove_field(fieldname) {
     	delete event[fieldname];
     });
@@ -168,7 +173,7 @@ function generate_batch(state, data_array, result_callback) {
   } else {
   	//setTimeout(generate_batch, 0, state, data_array, result_callback);
     process.nextTick( function () {
-    	generate_batch(state, data_array, result_callback);
+    	generate_batch(state, driver_data, data_array, result_callback);
     });
   }
 }

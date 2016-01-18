@@ -4,7 +4,7 @@ var fs = require('fs');
 var moment = require('moment');
 var util = require('../../lib/util');
 
-module.exports.init = function(esClient, parameters) {
+module.exports.init = function(esClient, parameters, driver_data) {
   var state = {};
   
   set_state_value('index', state, parameters, "rankin*");
@@ -18,19 +18,23 @@ module.exports.init = function(esClient, parameters) {
   }
 
   if (parameters && parameters['text_filter_file']) {
-    if (parameters['_filter_terms_']) {
-      state.filter_terms = parameters['_filter_terms_'];
-    } else {
-      var filter_terms = load_string_file(parameters['text_filter_file']);
-      state.filter_terms = filter_terms;
-      parameters['_filter_terms_'] = filter_terms;
+    state.text_filter_file = parameters['text_filter_file'];
+    
+    if(!driver_data[state.text_filter_file]) {
+      var lines = load_string_file(parameters['text_filter_file']);
+
+      if(lines == undefined) {
+        process.exit();
+      }
+
+      driver_data[state.text_filter_file] = lines;
     }
   }
 
   return state;
 }
 
-module.exports.traffic = function(esClient, state, operation_parameters, result_callback) {
+module.exports.traffic = function(esClient, state, driver_data, operation_parameters, result_callback) {
   var timeout = state.timeout;
   if(operation_parameters.timeout && util.is_integer(operation_parameters.timeout) && operation_parameters.timeout > 0) {
     timeout = operation_parameters.timeout;
@@ -39,8 +43,8 @@ module.exports.traffic = function(esClient, state, operation_parameters, result_
   var end_ts = _.random(state.days.start, state.days.end);
   var start_ts = end_ts - (state.period * 24 * 3600 * 1000);
 
-  if (state.filter_terms) {
-    var text_filter = 'text: ' + state.filter_terms[_.random(0, state.filter_terms.length - 1)];
+  if (state.text_filter_file) {
+    var text_filter = 'text: ' + driver_data[state.text_filter_file][_.random(0, driver_data[state.text_filter_file].length - 1)];
   } else {
     var text_filter = '*';
   }
@@ -73,7 +77,7 @@ module.exports.traffic = function(esClient, state, operation_parameters, result_
   });
 }
 
-module.exports.errors = function(esClient, state, operation_parameters, result_callback) {
+module.exports.errors = function(esClient, state, driver_data, operation_parameters, result_callback) {
   var timeout = state.timeout;
   if(operation_parameters.timeout && util.is_integer(operation_parameters.timeout) && operation_parameters.timeout > 0) {
     timeout = operation_parameters.timeout;
@@ -82,8 +86,8 @@ module.exports.errors = function(esClient, state, operation_parameters, result_c
   var end_ts = _.random(state.days.start, state.days.end);
   var start_ts = end_ts - (state.period * 24 * 3600 * 1000);
 
-  if (state.filter_terms) {
-    var text_filter = 'text: ' + state.filter_terms[_.random(0, state.filter_terms.length - 1)];
+  if (state.text_filter_file) {
+    var text_filter = 'text: ' + driver_data[state.text_filter_file][_.random(0, driver_data[state.text_filter_file].length - 1)];
   } else {
     var text_filter = '*';
   }
@@ -114,7 +118,7 @@ module.exports.errors = function(esClient, state, operation_parameters, result_c
   });
 }
 
-module.exports.users = function(esClient, state, operation_parameters, result_callback) {
+module.exports.users = function(esClient, state, driver_data, operation_parameters, result_callback) {
   var timeout = state.timeout;
   if(operation_parameters.timeout && util.is_integer(operation_parameters.timeout) && operation_parameters.timeout > 0) {
     timeout = operation_parameters.timeout;
@@ -123,8 +127,8 @@ module.exports.users = function(esClient, state, operation_parameters, result_ca
   var end_ts = _.random(state.days.start, state.days.end);
   var start_ts = end_ts - (state.period * 24 * 3600 * 1000);
 
-  if (state.filter_terms) {
-    var text_filter = 'text: ' + state.filter_terms[_.random(0, state.filter_terms.length - 1)];
+  if (state.text_filter_file) {
+    var text_filter = 'text: ' + driver_data[state.text_filter_file][_.random(0, driver_data[state.text_filter_file].length - 1)];
   } else {
     var text_filter = '*';
   }

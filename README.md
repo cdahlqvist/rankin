@@ -45,6 +45,7 @@ Rankin is, in addition to the command-line configuration parameters described ab
       "concurrency": 1,
       "driver": "example",
       "rate_limit": 2,
+      "cycle_operations": false,
       "parameters": {
         "index_pattern": "logstash*"
       },
@@ -88,6 +89,7 @@ job_id | Yes | This is the ID of the job and will show up when statistics are re
 concurrency | No | The number of concurrent connections/workers that should be used for this job. If not specified this will default to 1.
 driver | Yes | Which driver to use for this job. This defined which operations and parameters that are supported.
 rate_limit | No | This is an upper limit for the number of requests per second the job will aim to generate against the cluster. If not specified this will default to generate as many requests as possible.
+cycle_operations | No | Parameter indicating whether all operations should be cycled through in sequence or be randomly triggered. This parameter defaults to *false* resulting in operations being selected randomly according to weight.
 parameters | No | Parameters to be sent through to the driver during the initiation phase. Can be used to customise the driver's behaviour.
 operations | No | List of the operations to run for the job. If no operations at all are specified, all operations supported by the driver will be run with equal probability of selection. The structure op an operation is described in the table below.
 

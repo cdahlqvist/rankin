@@ -102,9 +102,10 @@ module.exports.index = function(esClient, state, driver_data, operation_paramete
       if (err) {
         result_callback( { result_code: 'REQUEST_ERROR', operations_count: state.batch_size, operations_ok: 0, operations_fail: state.batch_size } );
       } else {
-        if(resp && ('errors' in resp) && resp.errors) {
-          var successful = state.batch_size - resp.errors;
-          result_callback( { result_code: 'EVENT_ERROR', operations_count: state.batch_size, operations_ok: successful, operations_fail: resp.errors } );
+        if(resp && resp.errors) {
+          var resp_errors = count_response_errors(resp);
+          var successful = state.batch_size - resp_errors;
+          result_callback( { result_code: 'EVENT_ERROR', operations_count: state.batch_size, operations_ok: successful, operations_fail: resp_errors } );
         }
 
         result_callback( { result_code: 'OK', operations_count: state.batch_size, operations_ok: state.batch_size, operations_fail: 0 } );
@@ -249,4 +250,15 @@ function load_string_files(str_files) {
   return files;
 }
 
+function count_response_errors(resp) {
+  var error_count = 0;
+  var results = resp.items;
+  for(var i = 0; i < results.length; i++) {
+    if(results[1].index.status != 200) {
+      error_count++;
+    }
+  }
+
+  return error_count;
+}
 

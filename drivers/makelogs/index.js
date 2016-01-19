@@ -69,7 +69,7 @@ module.exports.init = function(esClient, parameters, driver_data) {
     }
   }
   
-  if (!state.text_files || !util.is_string_array(state.text_files) || state.text_files.length < 1) {
+  if (parameters.text_files && (!util.is_string_array(parameters.text_files) || parameters.text_files.length < 1)) {
     util.log('makelogs error: Incorrect parameter text_files specified.');
     process.exit();
   } else {
@@ -164,7 +164,7 @@ function generate_batch(state, driver_data, data_array, result_callback) {
     });
 
     data_array.push({
-      header: { index: { _index: event.index, _type: 'logs' } },
+      header: { create: { _index: event.index, _type: 'logs' } },
       body: event
     });
   }
@@ -254,7 +254,7 @@ function count_response_errors(resp) {
   var error_count = 0;
   var results = resp.items;
   for(var i = 0; i < results.length; i++) {
-    if(results[1].index.status != 200) {
+    if(results[1]['create']['status'] != 200) {
       error_count++;
     }
   }

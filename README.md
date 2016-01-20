@@ -55,6 +55,7 @@ Rankin is, in addition to the command-line configuration parameters described ab
           "weight": 1
         },
         {
+          "label":"count-default"
           "name": "count",
           "weight": 2,
           "sla": 200
@@ -98,6 +99,7 @@ Each operation in the list can contsin the following parameters:
 Field | Mandatory | Description
 :------------ | :------------- | :------------
 name | Yes | Name of the operation. Must be defined by the driver.
+label | No | Label to be used for grouping of results. Defaults to operation name if not provided.
 weight | No | The relative number of operations of this type that willbe performed. Must be an integer greater than 0. If no weight is specified, it defaults to 1 for the operation. 
 sla | No | Defines the upper SLA limit in milliseconds for the operation. If this is defined, every operation that exceeds this threshold will be flagged. If no sla is specified, no sla will be tracked.
 parameters | No | This field can contsin a set of parameters that will be passed in to the operation for every execution.

@@ -38,11 +38,13 @@ Below is a sample configuration file that shows how the driver can be invoked. I
           "weight": 1
         },
         {
+          "label": "count-1",
           "name": "count",
           "weight": 2,
           "sla": 200
         },
         {
+          "label": "count-2",
           "name": "count",
           "weight": 1,
           "sla": 200,
@@ -60,11 +62,66 @@ Below is a sample configuration file that shows how the driver can be invoked. I
 }
 ```
 
-# Anatomy of a driver
+## Generated results
+Rankin generates two types of results, summary and detail records. These are in JSON format where each line contains a single JSON object.
+
+The structure of a summary record, which summarises all operations related to a specific job, driver and label is as follows when pretty printed:
+
+```
+{
+	"run": {
+		"run_id": "20160120_111021_621",
+		"cluster": "test_cluster"
+	},
+	"timestamp": "2016-01-20T11:11:21.670Z",
+	"record_type": "summary",
+	"job_id": "job1",
+	"label": "count-1",
+	"result": {
+		"result_code": "OK"
+	},
+	"period": 60.02,
+	"count": 74,
+	"tps": 1.2329223592135954,
+	"sla_breaches": 0,
+	"latency_min": 2,
+	"latency_max": 9,
+	"latency_avg": 3.5405405405405403,
+	"latency_stddev": 0.7950873781901073
+}
+```
+
+Detail records are generated for each operation that completes and have the following structure, although the exact details can vary depending on the configuration:
+
+```
+{
+	"timestamp": "2016-01-20T11:10:24.132Z",
+	"job_id": "job1",
+	"driver": "example",
+	"record_type": "detail",
+	"operation": "count",
+	"label": "count-2",
+	"parameters": {
+		"index_pattern": "logstash*"
+	},
+	"result": {
+		"result_code": "OK",
+		"count": 0
+	},
+	"latency": 4,
+	"sla_breach": false,
+	"run": {
+		"run_id": "20160120_111021_621",
+		"cluster": "test_cluster"
+	}
+}
+```
+
+## Anatomy of a driver
 
 The structure of a driver is best understood by reviewing the [example driver](./index.js). The various part of the driver are described below.
 
-## The init() function
+### The init() function
 
 The init function is passed an instance of a Elasticsearch client, parameters and an object that can be used to hold data shared between all tasks for a specific driver. It is responsible for initiating the state object, which will be passed into every operation initiated by this worker. This
 makes it possible to carry state between operations initiated by a single worker. There is however no method available to synchronize multiple workers.
@@ -91,7 +148,7 @@ function set_state_value(name, state, parameters, default_value) {
 }
 ```
 
-## Functions implementing operations
+### Functions implementing operations
 
 All functions that represent operations take 5 parameters.
 

@@ -23,7 +23,7 @@
           "sla": 200
         },
         {
-          "label": "count-2",
+           "label": "count-2",
           "name": "count",
           "weight": 1,
           "sla": 200,

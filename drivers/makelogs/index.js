@@ -254,11 +254,10 @@ function count_response_errors(resp) {
   var error_count = 0;
   var results = resp.items;
   for(var i = 0; i < results.length; i++) {
-    if(results[1]['create']['status'] != 200) {
+    if(results[i]['create']['status'] >= 300) {
       error_count++;
     }
   }
 
   return error_count;
 }
-

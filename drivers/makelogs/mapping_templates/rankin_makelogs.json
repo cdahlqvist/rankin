@@ -71,7 +71,10 @@
           "meta": {
             "properties": {
               "related": {
-                "type": "string"
+                "type": "string",
+                "index": "not_analyzed",
+                "doc_values": true,
+                "omit_norms" : true
               },
               "char": {
                 "type": "string",
@@ -83,6 +86,7 @@
                 "properties": {
                   "firstname": {
                     "type": "string",
+                    "index": "not_analyzed",
                     "doc_values": true,
                     "omit_norms" : true
                   },

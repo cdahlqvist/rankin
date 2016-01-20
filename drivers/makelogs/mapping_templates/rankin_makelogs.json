@@ -13,7 +13,8 @@
               "index" : "not_analyzed",
               "ignore_above" : 256,
               "type" : "string",
-              "doc_values": true
+              "doc_values": true,
+              "omit_norms" : true
             },
             "match_mapping_type" : "string",
             "match" : "*"
@@ -32,7 +33,9 @@
         "properties" : {
           "@version" : {
             "index" : "not_analyzed",
-            "type" : "string"
+            "type" : "string",
+
+            "omit_norms" : true
           },
           "@timestamp" : {
             "format" : "dateOptionalTime",
@@ -44,17 +47,20 @@
               "srcdest": {
                 "type": "string",
                 "index": "not_analyzed",
-                "doc_values": true
+                "doc_values": true,
+                "omit_norms" : true
               },
               "dest": {
                 "type": "string",
                 "index": "not_analyzed",
-                "doc_values": true
+                "doc_values": true,
+                "omit_norms" : true
               },
               "src": {
                 "type": "string",
                 "index": "not_analyzed",
-                "doc_values": true
+                "doc_values": true,
+                "omit_norms" : true
               },
               "coordinates": {
                 "type": "geo_point",
@@ -70,17 +76,21 @@
               "char": {
                 "type": "string",
                 "index": "not_analyzed",
-                "doc_values": true
+                "doc_values": true,
+                "omit_norms" : true
               },
               "user": {
                 "properties": {
                   "firstname": {
-                    "type": "string"
+                    "type": "string",
+                    "doc_values": true,
+                    "omit_norms" : true
                   },
                   "lastname": {
                     "type": "integer",
                     "index": "not_analyzed",
-                    "doc_values": true
+                    "doc_values": true,
+                    "omit_norms" : true
                   }
                 }
               }
@@ -95,12 +105,14 @@
             "fields": {
               "agent": {
                 "type": "string",
-                "index": "analyzed"
+                "index": "analyzed",
+                "omit_norms" : true
               },
               "raw": {
                 "type": "string",
                 "index": "not_analyzed",
-                "doc_values": true
+                "doc_values": true,
+                "omit_norms" : true
               }
             }
           },
@@ -109,18 +121,21 @@
             "fields": {
               "request": {
                 "type": "string",
-                "index": "analyzed"
+                "index": "analyzed",
+                "omit_norms" : true
               },
               "raw": {
                 "type": "string",
                 "index": "not_analyzed",
-                "doc_values": true
+                "doc_values": true,
+                "omit_norms" : true
               }
             }
           },
           "text" : {
             "index" : "analyzed",
-            "type" : "string"
+            "type" : "string",
+            "omit_norms" : true
           },
           "@message": {
             "type": "string",

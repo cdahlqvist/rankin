@@ -19,10 +19,10 @@ module.exports.count = function(esClient, state, driver_data, operation_paramete
     requestTimeout: 30000
   }, function (error, response) {
     if (error) {
-      result_callback( { 'result_code': 'ERROR', 'index_pattern': index_pattern } );
+      result_callback( { 'result_code': 'ERROR' } );
     }
 
-    result_callback( { 'result_code': 'OK', 'count': response.count, 'index_pattern': index_pattern } );
+    result_callback( { 'result_code': 'OK', 'count': response.count } );
   });
 }
 

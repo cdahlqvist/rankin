@@ -20,7 +20,7 @@ Rankin takes the following command line parameters:
 Long option | Short option | Description
 :------------ | :------------- | :------------
 **--file** | **-f**  | Path to test configuration file(s). **[Mandatory]**
-**--interval** | **-i**  | Reporting interval for summary statistics in seconds. Setting this to 0 will cause statistics to only be reported at the end of the run. **[default: 10]**
+**--interval** | **-i**  | Reporting interval for summary statistics in seconds. Setting this to 0 will cause statistics to only be reported at the end of the run. **[default: 60]**
 **--duration** | **-d**  | Duration of the run in minutes. **[default: 1]**
 **--agents** | **-a**  | Number of agents to run. Must be a positive integer. **[default: 1]**
 **--creds** | **-c**  | user:password credentials when you want to connect to a secured elasticsearch cluster over basic auth.

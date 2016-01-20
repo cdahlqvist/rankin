@@ -17,11 +17,13 @@
           "weight": 1
         },
         {
+          "label": "count-1",
           "name": "count",
           "weight": 2,
           "sla": 200
         },
         {
+          "label": "count-2",
           "name": "count",
           "weight": 1,
           "sla": 200,

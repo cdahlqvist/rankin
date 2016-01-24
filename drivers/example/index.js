@@ -1,4 +1,6 @@
 
+var util = require('../../lib/util');
+
 module.exports.init = function(esClient, parameters, driver_data) {
   var state = {};
 
@@ -47,6 +49,30 @@ module.exports.cluster_health = function(esClient, state, driver_data, operation
     }
 
     result_callback( { 'result_code': 'OK', 'cluster_status': response.status } );
+  });
+}
+
+module.exports.index_size = function(esClient, state, driver_data, operation_parameters, result_callback) {
+  var index_pattern = state['index_pattern'];
+
+  if(operation_parameters.index_pattern) {
+    index_pattern = operation_parameters.index_pattern;
+  }
+
+  esClient.indices.stats({
+    index: index_pattern,
+    metric: "store",
+    level: "indices",
+    requestTimeout: 30000
+  }, function (error, response) {
+    if (error) {
+      result_callback('ERROR');
+    }
+
+    var primary_size = response["_all"]["primaries"]["store"]["size_in_bytes"];
+    var total_size = response["_all"]["total"]["store"]["size_in_bytes"];
+
+    result_callback( { 'result_code': 'OK', 'primary_size': primary_size, "total_size": total_size } );
   });
 }
 

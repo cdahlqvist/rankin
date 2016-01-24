@@ -1,5 +1,5 @@
 # Driver: example
-This simple driver has been created as an example of how a driver can be designed, and should be possible to use as a template for more complex drivers.
+This simple driver has been created as an example of how a driver can be designed, and should be possible to use as a template for more complex drivers. It implements a set of general cluster and index level operations, which can be useful when monitoring clusters during benchmarking.
 
 ## Operations
 This driver supports the following 3 Elasticsearch operations:
@@ -15,8 +15,11 @@ Performs a simple ping against the Elasticsearch cluster.
 ### cluster_health
 This operation will check the cluster status (*green*, *yellow* or *red*) and will return this as part of the result.
 
+### index_size
+This operation determines the total primary and total size of all indices that make up an index pattern.
+
 ## Example Configuration File
-Below is a sample configuration file that shows how the driver can be invoked. In this example a single worker will be used to generate 2 requests per second. The mix of operations will be 20% **ping**, 20% **cluster_health** and 60% **count** operations for two different index patterns. All count operations taking longer than 200 ms will be counted as having breached the SLA.
+Below is a sample configuration file that shows how the driver can be invoked. In this example a single worker will be used to generate 2 requests per second. The mix of operations will be 20% **ping**, 20% **cluster_health**, 20% **index_size** and 40% **count** operations for two different index patterns. All count operations taking longer than 200 ms will be counted as having breached the SLA.
 
 ```
 {
@@ -40,7 +43,7 @@ Below is a sample configuration file that shows how the driver can be invoked. I
         {
           "label": "count-1",
           "name": "count",
-          "weight": 2,
+          "weight": 1,
           "sla": 200
         },
         {
@@ -55,6 +58,13 @@ Below is a sample configuration file that shows how the driver can be invoked. I
         {
           "name": "cluster_health",
           "weight": 1
+        },
+        {
+          "name": "index_size",
+          "weight": 1,
+          "parameters": {
+            "index_pattern": "*"
+          }
         }
       ]
     }

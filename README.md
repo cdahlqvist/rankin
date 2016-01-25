@@ -27,6 +27,7 @@ Long option | Short option | Description
 **--hosts** | **-h**  | List of host name and port combinations to connect to, e.g. host1:9200,host2:9200 **[default: "localhost:9200"]**
 **--protocol** | **-p**  | Protocol to use (http/https) when connecting to Elasticsearch. **[default: "http"]**
 **--directory** | **-D**  | Directory which to write results and statistics to. **[default: "."]**
+**--run_id** | **-r** | Optional run id used to link results together.
 **--help** || Show the help message
 
 When run, Rankin will output logging information to *stdout*. Results from individual requests as well as summary statistics are written to a results file specific to the run in JSON format in the specified data directory.

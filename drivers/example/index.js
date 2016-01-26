@@ -68,11 +68,15 @@ module.exports.index_size = function(esClient, state, driver_data, operation_par
     if (error) {
       result_callback('ERROR');
     }
+  
+    if(response["_all"]["primaries"]["store"]["size_in_bytes"] && response["_all"]["total"]["store"]["size_in_bytes"]) {
+      var primary_size = response["_all"]["primaries"]["store"]["size_in_bytes"];
+      var total_size = response["_all"]["total"]["store"]["size_in_bytes"];
 
-    var primary_size = response["_all"]["primaries"]["store"]["size_in_bytes"];
-    var total_size = response["_all"]["total"]["store"]["size_in_bytes"];
-
-    result_callback( { 'result_code': 'OK', 'primary_size': primary_size, "total_size": total_size } );
+      result_callback( { 'result_code': 'OK', 'primary_size': primary_size, "total_size": total_size } );
+    } else {
+      result_callback('ERROR');
+    }
   });
 }
 

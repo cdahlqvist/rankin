@@ -16,7 +16,6 @@ Parameter | Description
 **days** | Date or date interval events should be generated in. This can be specified in 3 formats: 1) Absolute single date, e.g. *"2015-04-20"* 2) Absolute date range, e.g. *"2015-04-20,2015-04-26"* 3) Date range relative to current date/time, e.g. *"-7,3"*. If not specified, all events will be generated based on the current date/time.
 **index_prefix** | Prefix for the index name. This will be used as full index name if time based indices are not used. Defaults to *"rankin-"*.
 **time_index** | Boolean parameter indicating whether time based indices are to be used. Defaults to *true*.
-
 **event_template_file** | Path to a file containing the JSON event template to use for record generation. If not provided, an empty event will be used as template.
 **value_definitions** | This parameter contains a list of named values that can be associated with fields in the template. Four types of values are supported: integers, floats, strings from a text file and JSON objects from a file containing a list of JSON objects. The example configuration file shows how these can be specified.
 **field_value_map** | This parameter contains a map of fields and which values they are to be replaced with when generating the event. A random value for the field will be picked from the value it is accociated with. If the field already exists it will be overwritten. If the value it is mapped to does not exist, it will simply be skipped. This parameter can be passed as an operation parameter.

@@ -1,0 +1,69 @@
+{
+  "jobs" : [
+    {
+      "job_id": "jsonevents",
+      "concurrency": 2,
+      "driver": "jsonevents",
+      "rate_limit": 1,
+      "cycle_operations": true,
+      "parameters": {
+        "batch_size":1000,
+        "days":"2016-01-01,2016-01-31" ,           
+        "index_prefix":"jsonevents",  
+        "time_index":false,
+        "event_template_file" : "./drivers/jsonevents/example_data/event_template.json",
+        "value_definitions": [
+          {
+            "name":"i",
+            "type":"integer",
+            "min_integer":10000,
+            "max_integer":20000
+          },
+          {
+            "name":"f",
+            "type":"float",
+            "min_float":100.0,
+            "max_float":200.0
+          },
+          {
+            "name":"j",
+            "type":"json_file",
+            "file":"./drivers/jsonevents/example_data/json_file.json"
+          },
+          {
+            "name":"t",
+            "type":"text_file",
+            "file":"./drivers/jsonevents/example_data/text_file.txt"
+          }
+        ],
+        "field_value_map": {
+            "field4": "i",
+            "field10": "f",
+            "field1": "t",
+            "field14": "j"
+        },
+        "timeout":10000
+      },
+      "operations": [
+        {
+          "label": "index_override",
+          "name": "index",
+          "weight": 1,
+          "parameters": {
+          	"field_value_map": {
+              "field5": "i",
+              "field20": "f",
+              "field2": "t",
+              "field15": "j"
+            }
+          }
+        },
+        {
+          "label": "index_default",
+          "name": "index",
+          "weight": 1
+        }
+      ]
+    }
+  ]
+}

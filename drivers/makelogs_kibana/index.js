@@ -10,6 +10,7 @@ module.exports.init = function(esClient, parameters, driver_data) {
   set_state_value('index', state, parameters, "rankin*");
   set_state_value('period', state, parameters, 30);
   set_state_value('timeout', state, parameters, 30000);
+  set_state_value('use_text_filter', state, parameters, true);
 
   if (parameters && parameters['days']) {
     state.days = parse_days(parameters['days']);
@@ -40,10 +41,15 @@ module.exports.traffic = function(esClient, state, driver_data, operation_parame
     timeout = operation_parameters.timeout;
   }
 
+  var use_text_filter = state.use_text_filter;
+  if(operation_parameters.use_text_filter) {
+    use_text_filter = operation_parameters.use_text_filter;
+  }
+
   var end_ts = _.random(state.days.start, state.days.end);
   var start_ts = end_ts - (state.period * 24 * 3600 * 1000);
 
-  if (state.text_filter_file) {
+  if (state.text_filter_file && use_text_filter) {
     var text_filter = 'text: ' + driver_data[state.text_filter_file][_.random(0, driver_data[state.text_filter_file].length - 1)];
   } else {
     var text_filter = '*';
@@ -83,10 +89,15 @@ module.exports.errors = function(esClient, state, driver_data, operation_paramet
     timeout = operation_parameters.timeout;
   }
 
+  var use_text_filter = state.use_text_filter;
+  if(operation_parameters.use_text_filter) {
+    use_text_filter = operation_parameters.use_text_filter;
+  }
+
   var end_ts = _.random(state.days.start, state.days.end);
   var start_ts = end_ts - (state.period * 24 * 3600 * 1000);
 
-  if (state.text_filter_file) {
+  if (state.text_filter_file && use_text_filter) {
     var text_filter = 'text: ' + driver_data[state.text_filter_file][_.random(0, driver_data[state.text_filter_file].length - 1)];
   } else {
     var text_filter = '*';
@@ -124,10 +135,15 @@ module.exports.users = function(esClient, state, driver_data, operation_paramete
     timeout = operation_parameters.timeout;
   }
 
+  var use_text_filter = state.use_text_filter;
+  if(operation_parameters.use_text_filter) {
+    use_text_filter = operation_parameters.use_text_filter;
+  }
+
   var end_ts = _.random(state.days.start, state.days.end);
   var start_ts = end_ts - (state.period * 24 * 3600 * 1000);
 
-  if (state.text_filter_file) {
+  if (state.text_filter_file && use_text_filter) {
     var text_filter = 'text: ' + driver_data[state.text_filter_file][_.random(0, driver_data[state.text_filter_file].length - 1)];
   } else {
     var text_filter = '*';

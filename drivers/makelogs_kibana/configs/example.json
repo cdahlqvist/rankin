@@ -1,30 +1,44 @@
 {
-  "jobs" : [
+  "jobs": [
     {
       "job_id": "KibanaExample",
       "concurrency": 1,
       "driver": "makelogs_kibana",
-      "rate_limit": 0.5,
+      "rate_limit": 0.2,
       "parameters": {
         "index": "rankin_all",
-        "days": "2015-01-20,2015-01-31",
-        "period": 7
+        "days": "2015-01-30,2015-01-31",
+        "period": 21,
+        "timeout": 60000,
+        "text_filter_file":"./drivers/makelogs_kibana/configs/filters.txt",
+        "use_text_filter":false
       },
       "operations": [
         {
           "name": "traffic",
-          "weight": 2,
-          "sla": 1000
+          "weight": 6,
+          "sla": 2000,
+          "parameters": {
+            "timeout": 120000
+          }
         },
         {
           "name": "errors",
-          "weight": 2,
-          "sla": 1000
+          "weight": 1,
+          "sla": 3000
         },
         {
           "name": "users",
           "weight": 2,
-          "sla": 1000
+          "sla": 2000
+        },
+        {
+          "name": "users",
+          "weight": 1,
+          "sla": 2000,
+          "parameters": {
+            "use_text_filter":true
+          }
         }
       ]
     }

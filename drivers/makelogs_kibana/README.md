@@ -32,6 +32,7 @@ Parameter | Description
 **period** | Length of the period in days that the Kiana queries will address. Defaults to 30.
 **timeout** | Request timeout in milliseconds. Defaults to 30000 (30s). This can also be passed as a parameter to the individual operations.
 **text_filter_file** | Path to file containing terms used to filter the 'text' field. If no file is provided, the default behaviour is that no filtering on the 'text' field will occur.
+**use_text_filter** | Boolean indicating whether the a record from the supplied text_filter_file should be used as a filter if present. This parameter can be overridden per operation.
 
 ## Example Configuration File
 Below is a sample configuration file that shows how the driver can be invoked. 
@@ -50,14 +51,16 @@ This example switches between all three dashboards according to the weights at a
         "index": "rankin_all",
         "days": "2015-01-30,2015-01-31",
         "period": 21,
-        "timeout": 60000
+        "timeout": 60000,
+        "text_filter_file":"./drivers/makelogs_kibana/configs/filters.txt",
+        "use_text_filter":false
       },
       "operations": [
         {
           "name": "traffic",
           "weight": 6,
           "sla": 2000,
-          "parameters:" {
+          "parameters": {
             "timeout": 120000
           }
         },
@@ -68,8 +71,16 @@ This example switches between all three dashboards according to the weights at a
         },
         {
           "name": "users",
-          "weight": 3,
+          "weight": 2,
           "sla": 2000
+        },
+        {
+          "name": "users",
+          "weight": 1,
+          "sla": 2000,
+          "parameters": {
+            "use_text_filter":true
+          }
         }
       ]
     }

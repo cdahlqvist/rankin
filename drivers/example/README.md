@@ -15,11 +15,14 @@ Performs a simple ping against the Elasticsearch cluster.
 ### cluster_health
 This operation will check the cluster status (*green*, *yellow* or *red*) and will return this as part of the result.
 
+### cluster_stats
+This operation will retrieve the cluster stats and return this as part of the result.
+
 ### index_size
 This operation determines the total primary and total size of all indices that make up an index pattern.
 
 ## Example Configuration File
-Below is a sample configuration file that shows how the driver can be invoked. In this example a single worker will be used to generate 2 requests per second. The mix of operations will be 20% **ping**, 20% **cluster_health**, 20% **index_size** and 40% **count** operations for two different index patterns. All count operations taking longer than 200 ms will be counted as having breached the SLA.
+Below is a sample configuration file that shows how the driver can be invoked. In this example a single worker will be used to generate 2 requests per second. The mix of operations will be 1/6 **ping**, 1/6 **cluster_health**, 1/6 **cluster_stats**, 1/6 **index_size** and 1/3 **count** operations for two different index patterns. All count operations taking longer than 200 ms will be counted as having breached the SLA.
 
 ```
 {
@@ -65,6 +68,10 @@ Below is a sample configuration file that shows how the driver can be invoked. I
           "parameters": {
             "index_pattern": "*"
           }
+        },
+        {
+          "name": "cluster_stats",
+          "weight": 1
         }
       ]
     }

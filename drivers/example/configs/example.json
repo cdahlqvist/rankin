@@ -42,6 +42,10 @@
           "parameters": {
             "index_pattern": "*"
           }
+        },
+        {
+          "name": "cluster_stats",
+          "weight": 1
         }
       ]
     }

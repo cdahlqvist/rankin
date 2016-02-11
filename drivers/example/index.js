@@ -52,6 +52,18 @@ module.exports.cluster_health = function(esClient, state, driver_data, operation
   });
 }
 
+module.exports.cluster_stats = function(esClient, state, driver_data, operation_parameters, result_callback) {
+  esClient.cluster.stats({
+    requestTimeout: 30000
+  }, function (error, response) {
+    if (error) {
+      result_callback('ERROR');
+    }
+
+    result_callback( { 'result_code': 'OK', 'cluster_stats': response } );
+  });
+}
+
 module.exports.index_size = function(esClient, state, driver_data, operation_parameters, result_callback) {
   var index_pattern = state['index_pattern'];
 

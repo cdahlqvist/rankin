@@ -21,6 +21,9 @@ This operation will retrieve the cluster stats and return this as part of the re
 ### index_size
 This operation determines the total primary and total size of all indices that make up an index pattern.
 
+### no_op
+This operation performs no work at all and always returns OK.
+
 ## Example Configuration File
 Below is a sample configuration file that shows how the driver can be invoked. In this example a single worker will be used to generate 2 requests per second. The mix of operations will be 1/6 **ping**, 1/6 **cluster_health**, 1/6 **cluster_stats**, 1/6 **index_size** and 1/3 **count** operations for two different index patterns. All count operations taking longer than 200 ms will be counted as having breached the SLA.
 

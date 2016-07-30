@@ -1,0 +1,32 @@
+{
+  "jobs": [
+    {
+      "job_id": "KibanaExample",
+      "concurrency": 1,
+      "driver": "elasticlogs_kibana",
+      "rate_limit": 0.2,
+      "parameters": {
+        "index_list": ["rankin_elasticlogs*"],
+        "days": "2016-01-30,2016-01-31",
+        "period": 1,
+        "timeout": 60000,
+        "use_text_filter":false
+      },
+      "operations": [
+        {
+          "name": "traffic",
+          "weight": 3,
+          "sla": 2000,
+          "parameters": {
+            "timeout": 120000
+          }
+        },
+        {
+          "name": "content_issues",
+          "weight": 1,
+          "sla": 1000
+        }
+      ]
+    }
+  ]
+}

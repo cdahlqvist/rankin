@@ -1,0 +1,1 @@
+curl -XPOST http://localhost:9200/_template/rankin_elasticlogs -d @elasticlogs_v5.json

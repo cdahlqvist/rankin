@@ -1,0 +1,69 @@
+{
+  "template": "rankin_elasticlogs*",
+  "settings": {
+    "index.refresh_interval": "5s",
+    "index.codec": "best_compression",
+    "number_of_shards": 5,
+    "number_of_replicas": 0
+  },
+  "mappings": {
+    "_default_": {
+      "dynamic_templates": [{
+        "string_fields": {
+          "mapping": {
+            "index": "not_analyzed",
+            "type": "string",
+            "doc_values": true
+          },
+          "match_mapping_type": "string",
+          "match": "*"
+        }
+      }],
+      "properties": {
+        "@timestamp": { "type": "date" },
+        "@version": { "type": "string", "index": "not_analyzed" },
+        "message": { "type": "string", "index": "no" },
+        "geoip"  : {
+          "dynamic": true,
+          "properties" : {
+            "location" : { "type" : "geo_point" }
+          }
+        },
+        "request": {
+          "index": "analyzed",
+          "norms": {
+            "enabled": false
+          },
+          "type": "string",
+          "fields": {
+            "raw": {
+              "index": "not_analyzed",
+              "ignore_above": 256,
+              "type": "string",
+              "doc_values": true
+            }
+          }
+        },
+        "referrer": {
+          "index": "analyzed",
+          "norms": {
+            "enabled": false
+          },
+          "type": "string",
+          "fields": {
+            "raw": {
+              "index": "not_analyzed",
+              "ignore_above": 256,
+              "type": "string",
+              "doc_values": true
+            }
+          }
+        }
+      },
+      "_all": {
+        "enabled": false
+      }
+    }
+  },
+  "aliases": {}
+}

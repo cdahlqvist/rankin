@@ -1,0 +1,8 @@
+elasticsearch
+logstah
+beats
+kibana
+cloud
+*
+*
+*

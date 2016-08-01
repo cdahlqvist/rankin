@@ -74,8 +74,11 @@ function generate_batch(state, driver_data, data_array, result_callback) {
     	delete event[fieldname];
     });
 
+    var idx = event.index;
+    delete event['index'];
+
     data_array.push({
-      header: { create: { _index: event.index, _type: 'logs' } },
+      header: { create: { _index: idx, _type: 'logs' } },
       body: event
     });
   }

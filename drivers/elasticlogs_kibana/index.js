@@ -103,9 +103,9 @@ module.exports.traffic = function(esClient, state, driver_data, operation_parame
     requestTimeout: timeout
   }, function (err, resp) {
     if (err) {
-      result_callback( { result_code: 'ERROR', visualizations: 6, index: index_pattern } );
+      result_callback( { result_code: 'ERROR', visualizations: 6, index: index_pattern, text_filter_used: text_filter } );
     } else {
-      result_callback( { result_code: 'OK', visualizations: 6, index: index_pattern } );
+      result_callback( { result_code: 'OK', visualizations: 6, index: index_pattern, text_filter_used: text_filter } );
     }
   });
 }
@@ -172,9 +172,9 @@ module.exports.content_issues = function(esClient, state, driver_data, operation
     requestTimeout: timeout
   }, function (err, resp) {
     if (err) {
-      result_callback( { result_code: 'ERROR', visualizations: 5, index: index_pattern } );
+      result_callback( { result_code: 'ERROR', visualizations: 5, index: index_pattern, text_filter_used: text_filter } );
     } else {
-      result_callback( { result_code: 'OK', visualizations: 5, index: index_pattern } );
+      result_callback( { result_code: 'OK', visualizations: 5, index: index_pattern, text_filter_used: text_filter } );
     }
   });
 }

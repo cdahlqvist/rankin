@@ -55,8 +55,13 @@ module.exports.traffic = function(esClient, state, driver_data, operation_parame
     date_histogram_interval = operation_parameters.date_histogram_interval;
   }
 
+  var period = state.period;
+  if(operation_parameters.period) {
+    period = operation_parameters.period;
+  }
+
   var end_ts = _.random(state.days.start, state.days.end);
-  var start_ts = end_ts - (state.period * 24 * 3600 * 1000);
+  var start_ts = end_ts - (period * 24 * 3600 * 1000);
 
   if (state.text_filter_file && use_text_filter) {
     var text_filter = driver_data[state.text_filter_file][_.random(0, driver_data[state.text_filter_file].length - 1)];
@@ -128,8 +133,13 @@ module.exports.content_issues = function(esClient, state, driver_data, operation
     date_histogram_interval = operation_parameters.date_histogram_interval;
   }
 
+  var period = state.period;
+  if(operation_parameters.period) {
+    period = operation_parameters.period;
+  }
+
   var end_ts = _.random(state.days.start, state.days.end);
-  var start_ts = end_ts - (state.period * 24 * 3600 * 1000);
+  var start_ts = end_ts - (period * 24 * 3600 * 1000);
 
   if (state.text_filter_file && use_text_filter) {
     var text_filter = driver_data[state.text_filter_file][_.random(0, driver_data[state.text_filter_file].length - 1)];

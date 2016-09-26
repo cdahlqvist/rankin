@@ -164,7 +164,7 @@ function generate_batch(state, driver_data, data_array, result_callback) {
     });
 
     data_array.push({
-      header: { create: { _index: event.index, _type: 'logs' } },
+      header: { index: { _index: event.index, _type: 'logs' } },
       body: event
     });
   }
@@ -254,7 +254,7 @@ function count_response_errors(resp) {
   var error_count = 0;
   var results = resp.items;
   for(var i = 0; i < results.length; i++) {
-    if(results[i]['create'] && results[i]['create']['status'] && results[i]['create']['status'] >= 300) {
+    if(results[i]['index'] && results[i]['index']['status'] && results[i]['index']['status'] >= 300) {
       error_count++;
     }
   }

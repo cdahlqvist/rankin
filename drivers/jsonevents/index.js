@@ -93,7 +93,7 @@ function generate_batch(state, driver_data, field_value_map, data_array, result_
     var evt = generate_json_event(state, driver_data, field_value_map);
     
     data_array.push({
-      header: { create: { _index: evt.index, _type: 'logs' } },
+      header: { index: { _index: evt.index, _type: 'logs' } },
       body: evt.body
     });
   }
@@ -251,7 +251,7 @@ function count_response_errors(resp) {
   var error_count = 0;
   var results = resp.items;
   for(var i = 0; i < results.length; i++) {
-    if(results[i]['create']['status'] >= 300) {
+    if(results[i]['index']['status'] >= 300) {
       error_count++;
     }
   }

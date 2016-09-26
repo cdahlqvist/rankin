@@ -11,8 +11,7 @@
           "match" : "message",
           "match_mapping_type" : "string",
           "mapping" : {
-            "type" : "string", "index" : "analyzed", "omit_norms" : true,
-            "fielddata" : { "format" : "disabled" }
+            "type" : "string", "index" : "analyzed", "omit_norms" : true
           }
         }
       }, {
@@ -20,8 +19,7 @@
           "match" : "*",
           "match_mapping_type" : "string",
           "mapping" : {
-            "type" : "string", "index" : "not_analyzed", "omit_norms" : true,
-            "fielddata" : { "format" : "disabled" }
+            "type" : "string", "index" : "not_analyzed", "omit_norms" : true, "fielddata" : { "format" : "paged_bytes" }
           }
         }
       }, {

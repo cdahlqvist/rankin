@@ -41,7 +41,7 @@ Parameter | Description
 :------------ | :------------
 **batch_size** | Batch size for bulk index requests. Default value is *1000*.
 **days** | Date or date interval events should be generated in. This can be specified in 3 formats: 1) Absolute single date, e.g. *"2015-04-20"* 2) Absolute date range, e.g. *"2015-04-20,2015-04-26"* 3) Date range relative to current date/time, e.g. *"-7,3"*. If not specified, all events will be generated based on the current date/time.
-**index_prefix** | Prefix for the index name. This will be used as full index name if time based indices are not used. Defaults to *"rankin-"*.
+**index_prefix** | Prefix for the index name. This will be used as full index name if time based indices are not used. Defaults to *"rankin_elasticlogs"*.
 **time_index** | Boolean parameter indicating whether time based indices are to be used. Defaults to *true*.
 **delete_fields** | List of base level event fields to be deleted before the event is passed on for indexing. This allows customisation of the generated output. By default no fields are deleted.
 

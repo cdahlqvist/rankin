@@ -8,7 +8,7 @@
       "parameters": {
         "index_list": ["rankin_elasticlogs*"],
         "days": "2016-01-30,2016-01-31",
-        "period": 1,
+        "interval_days": 1.0,
         "timeout": 60000,
         "use_text_filter":false
       },

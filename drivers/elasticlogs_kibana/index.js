@@ -8,7 +8,7 @@ module.exports.init = function(esClient, parameters, driver_data) {
   var state = {};
   
   set_state_value('index_list', state, parameters, ["rankin*"]);
-  set_state_value('period', state, parameters, 30);
+  set_state_value('interval_days', state, parameters, 30);
   set_state_value('timeout', state, parameters, 30000);
   set_state_value('use_text_filter', state, parameters, false);
   set_state_value('date_histogram_interval', state, parameters, "1d");
@@ -55,13 +55,13 @@ module.exports.traffic = function(esClient, state, driver_data, operation_parame
     date_histogram_interval = operation_parameters.date_histogram_interval;
   }
 
-  var period = state.period;
-  if(operation_parameters.period) {
-    period = operation_parameters.period;
+  var interval_days = state.interval_days;
+  if(operation_parameters.interval_days) {
+    interval_days = operation_parameters.interval_days;
   }
 
   var end_ts = _.random(state.days.start, state.days.end);
-  var start_ts = end_ts - (period * 24 * 3600 * 1000);
+  var start_ts = end_ts - (interval_days * 24 * 3600 * 1000);
 
   if (state.text_filter_file && use_text_filter) {
     var text_filter = driver_data[state.text_filter_file][_.random(0, driver_data[state.text_filter_file].length - 1)];
@@ -108,9 +108,9 @@ module.exports.traffic = function(esClient, state, driver_data, operation_parame
     requestTimeout: timeout
   }, function (err, resp) {
     if (err) {
-      result_callback( { result_code: 'ERROR', visualizations: 6, index: index_pattern, text_filter_used: text_filter, period: period, date_histogram_interval: date_histogram_interval } );
+      result_callback( { result_code: 'ERROR', visualizations: 6, index: index_pattern, text_filter_used: text_filter, interval_days: interval_days, date_histogram_interval: date_histogram_interval } );
     } else {
-      result_callback( { result_code: 'OK', visualizations: 6, index: index_pattern, text_filter_used: text_filter, period: period, date_histogram_interval: date_histogram_interval } );
+      result_callback( { result_code: 'OK', visualizations: 6, index: index_pattern, text_filter_used: text_filter, interval_days: interval_days, date_histogram_interval: date_histogram_interval } );
     }
   });
 }
@@ -133,13 +133,13 @@ module.exports.content_issues = function(esClient, state, driver_data, operation
     date_histogram_interval = operation_parameters.date_histogram_interval;
   }
 
-  var period = state.period;
-  if(operation_parameters.period) {
-    period = operation_parameters.period;
+  var interval_days = state.interval_days;
+  if(operation_parameters.interval_days) {
+    interval_days = operation_parameters.interval_days;
   }
 
   var end_ts = _.random(state.days.start, state.days.end);
-  var start_ts = end_ts - (period * 24 * 3600 * 1000);
+  var start_ts = end_ts - (interval_days * 24 * 3600 * 1000);
 
   if (state.text_filter_file && use_text_filter) {
     var text_filter = driver_data[state.text_filter_file][_.random(0, driver_data[state.text_filter_file].length - 1)];
@@ -182,9 +182,9 @@ module.exports.content_issues = function(esClient, state, driver_data, operation
     requestTimeout: timeout
   }, function (err, resp) {
     if (err) {
-      result_callback( { result_code: 'ERROR', visualizations: 5, index: index_pattern, text_filter_used: text_filter, period: period, date_histogram_interval: date_histogram_interval } );
+      result_callback( { result_code: 'ERROR', visualizations: 5, index: index_pattern, text_filter_used: text_filter, interval_days: interval_days, date_histogram_interval: date_histogram_interval } );
     } else {
-      result_callback( { result_code: 'OK', visualizations: 5, index: index_pattern, text_filter_used: text_filter, period: period, date_histogram_interval: date_histogram_interval } );
+      result_callback( { result_code: 'OK', visualizations: 5, index: index_pattern, text_filter_used: text_filter, interval_days: interval_days, date_histogram_interval: date_histogram_interval } );
     }
   });
 }

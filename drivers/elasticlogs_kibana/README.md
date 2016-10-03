@@ -23,7 +23,7 @@ Parameter | Description
 :------------ | :------------
 **index_list** | List of indices or aliases to query. A random entry from the list will be selected for each execution. Defaults to '["rankin*"]'.
 **days** | Date or date interval the current date will be randomized from. This can be specified in 3 formats: 1) Absolute single date, e.g. *"2016-04-20"* 2) Absolute date range, e.g. *"2016-04-20,2016-04-26"* 3) Date range relative to current date/time, e.g. *"-7,3"*. Defaults to *"-1,0"*. The generated date will be used as the end date for the period queried.
-**period** | Length of the period in days that the Kibana queries will address. Defaults to 30.
+**interval_days** | Length of the period in days that the Kibana queries will address. Defaults to 30.0.
 **date_histogram_interval** | The interval to use for date histograms. Defaults to "1d". This parameter can be overridden per operation.
 **timeout** | Request timeout in milliseconds. Defaults to 30000 (30s). This can also be passed as a parameter to the individual operations.
 **text_filter_file** | Path to file containing terms used to filter the 'text' field. If no file is provided, the default behaviour is that no filtering on the 'text' field will occur.

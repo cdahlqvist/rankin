@@ -18,7 +18,7 @@ module.exports.init = function(esClient, parameters, driver_data) {
   if (parameters && parameters['index_prefix']) {
     state.index_prefix = parameters['index_prefix'];
   } else {
-    state.index_prefix = 'rankin-';
+    state.index_prefix = 'rankin_elasticlogs';
   }
 
   if (parameters && parameters['time_index'] == false) {

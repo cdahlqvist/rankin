@@ -8,7 +8,7 @@
       "parameters": {
         "index_list": ["rankin_elasticlogs*"],
         "days": "2016-01-28,2016-01-31",
-        "period": 28,
+        "interval_days": 28.0,
         "timeout": 60000,
         "text_filter_file":"./drivers/elasticlogs_kibana/configs/filters.txt",
         "use_text_filter":true
@@ -20,7 +20,7 @@
           "sla": 2000,
           "parameters": {
             "timeout": 30000,
-            "period": 0.5,
+            "interval_days": 0.5,
             "date_histogram_interval": "30m"
           }
         },

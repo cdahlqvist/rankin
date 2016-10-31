@@ -72,19 +72,30 @@ module.exports.traffic = function(esClient, state, driver_data, operation_parame
   var msearch_body;
   if (state.elasticsearch_version.substring(0, 1) == "5") {
     msearch_body = [
-      {"index":index_pattern,"ignore_unavailable":true},
+      {"index":index_pattern,"ignore_unavailable":true, "preference":end_ts.toString()},
       {"query":{"bool":{"must":[{"query_string":{"query":"*","analyze_wildcard":true}},{"query_string":{"query":text_filter,"analyze_wildcard":true}},{"range":{"@timestamp":{"gte":start_ts,"lte":end_ts,"format":"epoch_millis"}}}],"must_not":[]}},"size":0,"aggs":{}},
-      {"index":index_pattern,"ignore_unavailable":true},
+      {"index":index_pattern,"ignore_unavailable":true, "preference":end_ts.toString()},
       {"size":0,"aggs":{"2":{"terms":{"field":"request.raw","size":20,"order":{"_count":"desc"}}}},"query":{"bool":{"must":[{"query_string":{"analyze_wildcard":true,"query":"*"}},{"query_string":{"query":text_filter,"analyze_wildcard":true}},{"range":{"@timestamp":{"gte":start_ts,"lte":end_ts,"format":"epoch_millis"}}}],"must_not":[]}},"highlight":{"pre_tags":["@kibana-highlighted-field@"],"post_tags":["@/kibana-highlighted-field@"],"fields":{"*":{}},"require_field_match":false,"fragment_size":2147483647}},
-      {"index":index_pattern,"ignore_unavailable":true},
+      {"index":index_pattern,"ignore_unavailable":true, "preference":end_ts.toString()},
       {"size":0,"aggs":{"2":{"terms":{"field":"geoip.country_name","size":10,"order":{"_count":"desc"}}}},"query":{"bool":{"must":[{"query_string":{"analyze_wildcard":true,"query":"*"}},{"query_string":{"query":text_filter,"analyze_wildcard":true}},{"range":{"@timestamp":{"gte":start_ts,"lte":end_ts,"format":"epoch_millis"}}}],"must_not":[]}},"highlight":{"pre_tags":["@kibana-highlighted-field@"],"post_tags":["@/kibana-highlighted-field@"],"fields":{"*":{}},"require_field_match":false,"fragment_size":2147483647}},
-      {"index":index_pattern,"ignore_unavailable":true},
+      {"index":index_pattern,"ignore_unavailable":true, "preference":end_ts.toString()},
       {"size":0,"aggs":{"4":{"terms":{"field":"useragent.os_name","size":10,"order":{"_count":"desc"}}}},"query":{"bool":{"must":[{"query_string":{"analyze_wildcard":true,"query":"*"}},{"query_string":{"query":text_filter,"analyze_wildcard":true}},{"range":{"@timestamp":{"gte":start_ts,"lte":end_ts,"format":"epoch_millis"}}}],"must_not":[]}},"highlight":{"pre_tags":["@kibana-highlighted-field@"],"post_tags":["@/kibana-highlighted-field@"],"fields":{"*":{}},"require_field_match":false,"fragment_size":2147483647}},
-      {"index":index_pattern,"ignore_unavailable":true},
+      {"index":index_pattern,"ignore_unavailable":true, "preference":end_ts.toString()},
       {"size":0,"aggs":{"2":{"date_histogram":{"field":"@timestamp","interval":date_histogram_interval,"time_zone":"Europe/London","min_doc_count":1},"aggs":{"3":{"terms":{"field":"response","size":10,"order":{"_count":"desc"}}}}}},"query":{"bool":{"must":[{"query_string":{"analyze_wildcard":true,"query":"*"}},{"query_string":{"query":text_filter,"analyze_wildcard":true}},{"range":{"@timestamp":{"gte":start_ts,"lte":end_ts,"format":"epoch_millis"}}}],"must_not":[]}},"highlight":{"pre_tags":["@kibana-highlighted-field@"],"post_tags":["@/kibana-highlighted-field@"],"fields":{"*":{}},"require_field_match":false,"fragment_size":2147483647}},
-      {"index":index_pattern,"ignore_unavailable":true},
+      {"index":index_pattern,"ignore_unavailable":true, "preference":end_ts.toString()},
       {"size":0,"aggs":{"2":{"geohash_grid":{"field":"geoip.location","precision":2}}},"query":{"bool":{"must":[{"query_string":{"analyze_wildcard":true,"query":"*"}},{"query_string":{"query":text_filter,"analyze_wildcard":true}},{"range":{"@timestamp":{"gte":start_ts,"lte":end_ts,"format":"epoch_millis"}}}],"must_not":[]}},"highlight":{"pre_tags":["@kibana-highlighted-field@"],"post_tags":["@/kibana-highlighted-field@"],"fields":{"*":{}},"require_field_match":false,"fragment_size":2147483647}}
     ];
+
+    esClient.msearch({
+      body: msearch_body,
+      requestTimeout: timeout
+    }, function (err, resp) {
+      if (err) {
+        result_callback( { result_code: 'ERROR', visualizations: 6, index: index_pattern, text_filter_used: text_filter, interval_days: interval_days, date_histogram_interval: date_histogram_interval } );
+      } else {
+        result_callback( { result_code: 'OK', visualizations: 6, index: index_pattern, text_filter_used: text_filter, interval_days: interval_days, date_histogram_interval: date_histogram_interval } );
+      }
+    });
    } else {
     msearch_body = [
       {"index":index_pattern,"search_type":"count","ignore_unavailable":true},
@@ -100,19 +111,19 @@ module.exports.traffic = function(esClient, state, driver_data, operation_parame
       {"index":index_pattern,"search_type":"count","ignore_unavailable":true},
       {"size":0,"aggs":{"4":{"terms":{"field":"useragent.os_name","size":10,"order":{"_count":"desc"}}}},"query":{"filtered":{"query":{"query_string":{"analyze_wildcard":true,"query":"*"}},"filter":{"bool":{"must":[{"query":{"query_string":{"query":text_filter,"analyze_wildcard":true}}},{"range":{"@timestamp":{"gte":start_ts,"lte":end_ts,"format":"epoch_millis"}}}],"must_not":[]}}}},"highlight":{"pre_tags":["@kibana-highlighted-field@"],"post_tags":["@/kibana-highlighted-field@"],"fields":{"*":{}},"require_field_match":false,"fragment_size":2147483647}}
     ];
-  } 
 
-  esClient.msearch({
-    preference: end_ts.toString(),
-    body: msearch_body,
-    requestTimeout: timeout
-  }, function (err, resp) {
-    if (err) {
-      result_callback( { result_code: 'ERROR', visualizations: 6, index: index_pattern, text_filter_used: text_filter, interval_days: interval_days, date_histogram_interval: date_histogram_interval } );
-    } else {
-      result_callback( { result_code: 'OK', visualizations: 6, index: index_pattern, text_filter_used: text_filter, interval_days: interval_days, date_histogram_interval: date_histogram_interval } );
-    }
-  });
+    esClient.msearch({
+      preference: end_ts.toString(),
+      body: msearch_body,
+      requestTimeout: timeout
+    }, function (err, resp) {
+      if (err) {
+        result_callback( { result_code: 'ERROR', visualizations: 6, index: index_pattern, text_filter_used: text_filter, interval_days: interval_days, date_histogram_interval: date_histogram_interval } );
+      } else {
+        result_callback( { result_code: 'OK', visualizations: 6, index: index_pattern, text_filter_used: text_filter, interval_days: interval_days, date_histogram_interval: date_histogram_interval } );
+      }
+    });
+  }
 }
 
 module.exports.content_issues = function(esClient, state, driver_data, operation_parameters, result_callback) {
@@ -150,17 +161,28 @@ module.exports.content_issues = function(esClient, state, driver_data, operation
   var msearch_body;
   if (state.elasticsearch_version.substring(0, 1) == "5") {
     msearch_body = [
-      {"index":index_pattern,"ignore_unavailable":true},
+      {"index":index_pattern,"ignore_unavailable":true, "preference":end_ts.toString()},
       {"query":{"bool":{"must":[{"query_string":{"query":"*","analyze_wildcard":true}},{"query_string":{"query":text_filter,"analyze_wildcard":true}},{"range":{"@timestamp":{"gte":start_ts,"lte":end_ts,"format":"epoch_millis"}}}],"must_not":[]}},"size":0,"aggs":{}},
-      {"index":index_pattern,"ignore_unavailable":true},
+      {"index":index_pattern,"ignore_unavailable":true, "preference":end_ts.toString()},
       {"size":0,"aggs":{"2":{"date_histogram":{"field":"@timestamp","interval":date_histogram_interval,"time_zone":"Europe/London","min_doc_count":1}}},"highlight":{"pre_tags":["@kibana-highlighted-field@"],"post_tags":["@/kibana-highlighted-field@"],"fields":{"*":{}},"require_field_match":false,"fragment_size":2147483647},"query":{"bool":{"must":[{"query_string":{"query":"*","analyze_wildcard":true}},{"match":{"response":{"query":404,"type":"phrase"}}},{"query_string":{"query":text_filter,"analyze_wildcard":true}},{"range":{"@timestamp":{"gte":start_ts,"lte":1469879774921,"format":"epoch_millis"}}}],"must_not":[]}}},
-      {"index":index_pattern,"ignore_unavailable":true},
+      {"index":index_pattern,"ignore_unavailable":true, "preference":end_ts.toString()},
       {"size":0,"aggs":{"2":{"terms":{"field":"referrer.raw","size":20,"order":{"_count":"desc"}}}},"highlight":{"pre_tags":["@kibana-highlighted-field@"],"post_tags":["@/kibana-highlighted-field@"],"fields":{"*":{}},"require_field_match":false,"fragment_size":2147483647},"query":{"bool":{"must":[{"query_string":{"query":"*","analyze_wildcard":true}},{"match":{"response":{"query":404,"type":"phrase"}}},{"query_string":{"query":text_filter,"analyze_wildcard":true}},{"range":{"@timestamp":{"gte":start_ts,"lte":1469879774921,"format":"epoch_millis"}}}],"must_not":[]}}},
-      {"index":index_pattern,"ignore_unavailable":true},
+      {"index":index_pattern,"ignore_unavailable":true, "preference":end_ts.toString()},
       {"size":0,"aggs":{"2":{"terms":{"field":"request.raw","size":20,"order":{"_count":"desc"}}}},"highlight":{"pre_tags":["@kibana-highlighted-field@"],"post_tags":["@/kibana-highlighted-field@"],"fields":{"*":{}},"require_field_match":false,"fragment_size":2147483647},"query":{"bool":{"must":[{"query_string":{"query":"*","analyze_wildcard":true}},{"match":{"response":{"query":404,"type":"phrase"}}},{"query_string":{"query":text_filter,"analyze_wildcard":true}},{"range":{"@timestamp":{"gte":start_ts,"lte":1469879774921,"format":"epoch_millis"}}}],"must_not":[]}}},
-      {"index":index_pattern,"ignore_unavailable":true},
+      {"index":index_pattern,"ignore_unavailable":true, "preference":end_ts.toString()},
       {"size":0,"aggs":{"2":{"filters":{"filters":{"Internal referrals":{"query_string":{"query":"referrer: \"www.elastic.co\"","analyze_wildcard":true}},"External referrals":{"query_string":{"query":"-referrer: \"www.elastic.co\"","analyze_wildcard":true}}}}}},"highlight":{"pre_tags":["@kibana-highlighted-field@"],"post_tags":["@/kibana-highlighted-field@"],"fields":{"*":{}},"require_field_match":false,"fragment_size":2147483647},"query":{"bool":{"must":[{"query_string":{"query":"*","analyze_wildcard":true}},{"match":{"response":{"query":404,"type":"phrase"}}},{"query_string":{"query":text_filter,"analyze_wildcard":true}},{"range":{"@timestamp":{"gte":start_ts,"lte":1469879774921,"format":"epoch_millis"}}}],"must_not":[]}}}
     ];
+
+    esClient.msearch({
+      body: msearch_body,
+      requestTimeout: timeout
+    }, function (err, resp) {
+      if (err) {
+        result_callback( { result_code: 'ERROR', visualizations: 5, index: index_pattern, text_filter_used: text_filter, interval_days: interval_days, date_histogram_interval: date_histogram_interval } );
+      } else {
+        result_callback( { result_code: 'OK', visualizations: 5, index: index_pattern, text_filter_used: text_filter, interval_days: interval_days, date_histogram_interval: date_histogram_interval } );
+      }
+    });
   } else {
     msearch_body = [
       {"index":index_pattern,"search_type":"count","ignore_unavailable":true},
@@ -174,19 +196,19 @@ module.exports.content_issues = function(esClient, state, driver_data, operation
       {"index":index_pattern,"search_type":"count","ignore_unavailable":true},
       {"size":0,"aggs":{"2":{"filters":{"filters":{"Internal referrals":{"query":{"query_string":{"query":"referrer: \"www.elastic.co\"","analyze_wildcard":true}}},"External referrals":{"query":{"query_string":{"query":"-referrer: \"www.elastic.co\"","analyze_wildcard":true}}}}}}},"highlight":{"pre_tags":["@kibana-highlighted-field@"],"post_tags":["@/kibana-highlighted-field@"],"fields":{"*":{}},"require_field_match":false,"fragment_size":2147483647},"query":{"filtered":{"query":{"query_string":{"query":"*","analyze_wildcard":true}},"filter":{"bool":{"must":[{"query":{"match":{"response":{"query":404,"type":"phrase"}}}},{"query":{"query_string":{"query":text_filter,"analyze_wildcard":true}}},{"range":{"@timestamp":{"gte":start_ts,"lte":end_ts,"format":"epoch_millis"}}}],"must_not":[]}}}}}
     ];
-  }
 
-  esClient.msearch({
-    preference: end_ts.toString(),
-    body: msearch_body,
-    requestTimeout: timeout
-  }, function (err, resp) {
-    if (err) {
-      result_callback( { result_code: 'ERROR', visualizations: 5, index: index_pattern, text_filter_used: text_filter, interval_days: interval_days, date_histogram_interval: date_histogram_interval } );
-    } else {
-      result_callback( { result_code: 'OK', visualizations: 5, index: index_pattern, text_filter_used: text_filter, interval_days: interval_days, date_histogram_interval: date_histogram_interval } );
-    }
-  });
+    esClient.msearch({
+      preference: end_ts.toString(),
+      body: msearch_body,
+      requestTimeout: timeout
+    }, function (err, resp) {
+      if (err) {
+        result_callback( { result_code: 'ERROR', visualizations: 5, index: index_pattern, text_filter_used: text_filter, interval_days: interval_days, date_histogram_interval: date_histogram_interval } );
+      } else {
+        result_callback( { result_code: 'OK', visualizations: 5, index: index_pattern, text_filter_used: text_filter, interval_days: interval_days, date_histogram_interval: date_histogram_interval } );
+      }
+    });
+  }
 }
 
 

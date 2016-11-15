@@ -1,0 +1,24 @@
+{
+  "@timestamp" : "2016-11-15T14:12:11.323Z",
+  "agent" : "Mozilla/5.0 (X11; Ubuntu; Linux i686; rv:35.0) Gecko/20100101 Firefox/35.0",
+  "useragent" : {
+    "os" : "Ubuntu",
+    "os_name" : "Ubuntu",
+    "name" : "Firefox"
+  },
+  "geoip" : {
+    "country_name" : "China",
+    "location" : [
+      104.06670000000003,
+      30.66669999999999
+    ]
+  },
+  "clientip" : "221.237.158.253",
+  "referrer" : "https://www.elastic.co/guide/en/beats/filebeat/current/configuring-howto-filebeat.html",
+  "request" : "/favicon-96x96.png",
+  "bytes" : 7589,
+  "verb" : "GET",
+  "response" : 200,
+  "httpversion" : "1.1",
+  "@message" : "221.237.158.253 - - [2016-11-15T14:12:11.323Z] \"GET /favicon-96x96.png HTTP/1.1\" 200 7589 \"-\" \"Mozilla/5.0 (X11; Ubuntu; Linux i686; rv:35.0) Gecko/20100101 Firefox/35.0\""
+}

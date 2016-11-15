@@ -1,0 +1,22 @@
+{
+  "jobs" : [
+    {
+      "job_id": "elasticlogs_benchmark",
+      "concurrency": 2,
+      "driver": "elasticlogs",
+      "parameters": {
+        "batch_size":1000,
+        "days":"2016-01-01,2016-01-31",
+        "index_prefix":"elasticlogs_benchmark",  
+        "time_index":false,
+        "delete_fields":[]
+      },
+      "operations": [
+        {
+          "name": "index",
+          "weight": 1
+        }
+      ]
+    }
+  ]
+}

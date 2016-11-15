@@ -5,8 +5,11 @@ The name Rankin comes from the Marvel character Calvin Rankin, aka [Mimic](http:
 
 ## Installation
 
+Clone the rankin GitHUb repository and perform the following steps:
+
 ```
-npm install -g rankin
+cd rankin
+npm install
 ```
 
 ## Execution

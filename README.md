@@ -59,7 +59,7 @@ Rankin is, in addition to the command-line configuration parameters described ab
           "weight": 1
         },
         {
-          "label":"count-default"
+          "label":"count-default",
           "name": "count",
           "weight": 2,
           "sla": 200
